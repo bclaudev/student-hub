@@ -1,0 +1,30 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Use your desired Node.js version
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build and Deploy
+        env:
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+        run: |
+          # Run your build or deploy script here
+          echo "Using SendGrid API Key: $SENDGRID_API_KEY"
+          # For example: npm run deploy or any script that uses the key

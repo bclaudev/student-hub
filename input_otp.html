@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter OTP</title>
+    <link rel="stylesheet" href="/dist/output.css">
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+    <!-- OTP Card -->
+    <div class="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
+        <h2 class="text-2xl font-semibold text-center mb-6">Enter OTP</h2>
+        
+        <form id="otpForm" class="space-y-4">
+            <!-- OTP Input -->
+            <div>
+                <label for="otp" class="block text-sm font-medium text-gray-700">OTP</label>
+                <input 
+                    type="text" 
+                    id="otp" 
+                    class="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" 
+                    placeholder="Enter OTP" 
+                    required
+                >
+            </div>
+
+            <!-- Verify Button -->
+            <button 
+                type="submit" 
+                class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+                Verify OTP
+            </button>
+        </form>
+
+        <p id="error-msg" class="text-center text-red-500 mt-4"></p>
+    </div>
+
+    <script src="otp.js"></script>
+</body>
+</html>
