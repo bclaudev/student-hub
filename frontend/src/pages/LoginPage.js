@@ -5,7 +5,7 @@ import { handleOtpRequest } from './LoginPage/handleOtpRequest.js';
 import { handleOtpSubmit } from './LoginPage/handleOtpSubmit.js';
 import { handleGoogleLoginSuccess } from './LoginPage/handleGoogleLoginSuccess.js';
 import Header from '../components/Header.js';
-import { User } from 'react-feather';
+import { User, Key } from 'react-feather';
 
 function LoginPage() {
   const [usernameOrPhone, setUsernameOrPhone] = useState('');
@@ -47,7 +47,7 @@ function LoginPage() {
           <hr className="my-6 border-gray-300 w-full" />
 
           {/* Username or Phone Number Form */}
-          <form className="space-y-4">
+          <form className="space-y-2">
             <div className="relative">
               <User color="#A585FF" className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
                 <input
@@ -55,34 +55,35 @@ function LoginPage() {
                   id="usernameOrPhone"
                   value={usernameOrPhone}
                   onChange={(e) => setUsernameOrPhone(e.target.value)}
-                  className="block w-full pl-10 mt-1 px-3 py-2 border border-gray-300 rounded-[12px] shadow-sm focus:ring-customPurple focus:ring-1 focus:border-customPurple focus:outline-none placeholder:text-placeholderGray placeholder:text-[12px]"
+                  className="block w-[345px] pl-10 mt-1 px-3 py-2 border border-gray-300 rounded-[12px] shadow-sm focus:ring-customPurple focus:ring-1 focus:border-customPurple focus:outline-none placeholder:text-placeholderGray placeholder:text-[12px]"
                   placeholder="Username or phone number"
                 />
             </div>
 
             {/* OTP Input Field (only shows if OTP has been requested) */}
             {otpRequested && (
-              <div>
-                <input
-                  type="text"
-                  id="otp"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  className="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-[12px] shadow-sm focus:ring-customPurple focus:ring-1 focus:border-customPurple focus:outline-none placeholder:text-placeholderGray placeholder:text-[12px]"
-                  placeholder="Enter OTP"
-                  required
-                />
+              <div className="relative">
+                <Key color="#A585FF" className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+                  <input
+                    type="text"
+                    id="otp"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    className="block w-[345px] pl-10 mt-1 px-3 py-2 border border-gray-300 rounded-[12px] shadow-sm focus:ring-customPurple focus:ring-1 focus:border-customPurple focus:outline-none placeholder:text-placeholderGray placeholder:text-[12px]"
+                    placeholder="Enter OTP"
+                    required
+                  />
               </div>
             )}
 
             {/* Submit Button */}
-            <div className="flex justify-center">
+            <div className="flex justify-center mt-4">
               {otpRequested ? (
                 <button
                   onClick={(e) =>
                     handleOtpSubmit(e, usernameOrPhone, otp, setNotification)
                   }
-                  className="w-[155px] bg-customPurple text-white py-2 px-4 rounded-[25px] hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="w-[155px] bg-customPurple text-white py-2 px-4 rounded-[25px] hover:bg-[#8060DB] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   Login
                 </button>
@@ -91,7 +92,7 @@ function LoginPage() {
                   onClick={(e) =>
                     handleOtpRequest(e, usernameOrPhone, setNotification, setOtpRequested)
                   }
-                  className="w-[155px] bg-customPurple text-white py-2 px-4 rounded-[25px] hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="w-[155px] bg-customPurple text-white py-2 px-4 rounded-[25px] hover:bg-[#8060DB] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   Login
                 </button>
