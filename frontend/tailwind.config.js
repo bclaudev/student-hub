@@ -7,8 +7,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        customPurple: '#A585FF'
+        customPurple: '#A585FF',
+        placeholderGray: '#C5C5C5',
       },
+
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+      }
     },
   },
   plugins: [],
