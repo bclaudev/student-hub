@@ -34,7 +34,7 @@ export const handleOtpRequest = async (e, usernameOrPhone, setNotification, setO
       } else {
         const data = await response.json();
         setNotification({
-          message: data.message || 'Failed to send OTP. Please try again.',
+          message: data.message || "Invalid username or password, if you don't own an account please Register first",
           borderColor: '#8D0C0C',
           bgColor: '#E3D8D8',
           textColor: '#6A0202',
