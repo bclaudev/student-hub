@@ -1,7 +1,14 @@
 import express from 'express';
 import cors from 'cors';
 import { OAuth2Client } from 'google-auth-library';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import pkg from 'pg'; // Import 'pg' as a package
 import authRoutes from './routes/auth.js';
+import { config } from 'dotenv';
+
+config(); // Load environment variables
+
+const { Pool } = pkg; // Destructure Pool from the imported 'pg' package
 
 const app = express();
 const port = 4000;
@@ -13,6 +20,13 @@ const client = new OAuth2Client(CLIENT_ID);
 // Enable CORS and JSON parsing
 app.use(cors());
 app.use(express.json());
+
+// Initialize PostgreSQL pool and Drizzle
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL, // Ensure this exists in your .env file
+});
+
+export const db = drizzle(pool); // Export Drizzle instance for usage in other parts of the app
 
 // Use auth routes
 app.use('/api/auth', authRoutes);
@@ -34,7 +48,8 @@ app.post('/api/auth/google', async (req, res) => {
     const email = payload.email;
     const name = payload.name;
 
-    // Here you can handle login or signup logic, such as creating a new user in the database
+    // Here you can handle login or signup logic, such as inserting a user into the database
+    console.log('Authenticated User:', { userId, email, name });
 
     res.status(200).json({ message: 'Google authentication successful', user: { userId, email, name } });
   } catch (error) {

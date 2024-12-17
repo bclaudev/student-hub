@@ -19,5 +19,8 @@
     "elysia": "^1.1.24",
     "express": "^4.21.1",
     "google-auth-library": "^9.14.2"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.30.1"
   }
 }
