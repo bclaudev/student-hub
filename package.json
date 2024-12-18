@@ -6,7 +6,8 @@
     "drizzle-orm": "^0.38.2",
     "moment": "^2.30.1",
     "pg": "^8.13.1",
-    "react-big-calendar": "^1.17.0"
+    "react-big-calendar": "^1.17.0",
+    "react-icons": "^5.4.0"
   },
   "scripts": {
     "dev": "concurrently \"npm run dev --prefix backend\" \"npm start --prefix frontend\" \"npm run tailwind:watch --prefix frontend\""

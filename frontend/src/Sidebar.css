@@ -1,9 +1,24 @@
 .sidebar {
     width: 256px; /* Default width when expanded */
+    height: 100vh; /* Full viewport height */
+    background-color: #f5f5f5; /* Example background color */
     transition: width 0.3s ease; /* Smooth resizing */
+    position: fixed; /* Fixed positioning */
+    top: 0;
+    left: 0;
   }
   
   .sidebar.minimized {
     width: 64px; /* Width when minimized */
+  }
+  
+  .main-content {
+    flex: 1; /* Takes remaining space */
+    margin-left: 256px; /* Default margin for expanded sidebar */
+    transition: margin-left 0.3s ease;
+  }
+  
+  .sidebar.minimized ~ .main-content {
+    margin-left: 64px; /* Adjust margin for minimized sidebar */
   }
   

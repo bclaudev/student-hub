@@ -1,12 +1,13 @@
-// src/pages/HomePage.js
 import React, { useState } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Sidebar from '../components/Sidebar.js';
 import '../CalendarStyles.css';
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-// Moment configuration to start from Monday -> Idea: Make this changable in settings
+
+// Moment configuration
 moment.updateLocale("en", {
   week: {
     dow: 1,
@@ -15,31 +16,95 @@ moment.updateLocale("en", {
 
 const localizer = momentLocalizer(moment);
 
-const events = [];
-
 const HomePage = () => {
-    const [isSidebarMinimized, setIsSidebarMinimized] = useState(false);
-  
-    return (
-      <div className="flex h-screen">
-        {/* Sidebar */}
-        <Sidebar
-          isMinimized={isSidebarMinimized}
-          toggleSidebar={() => setIsSidebarMinimized(!isSidebarMinimized)}
-        />
-  
-        {/* Calendar */}
-        <div className="flex-1 h-full">
-          <Calendar
-            localizer={localizer}
-            events={events}
-            startAccessor="start"
-            endAccessor="end"
-            className="h-full w-full"
-          />
-        </div>
-      </div>
-    );
+  const [isSidebarMinimized, setIsSidebarMinimized] = useState(false);
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  const toggleSidebar = () => {
+    setIsSidebarMinimized((prev) => !prev);
   };
 
-  export default HomePage;
+  const handlePreviousMonth = () => {
+    setCurrentDate((prev) => moment(prev).subtract(1, "month").toDate());
+  };
+
+  const handleNextMonth = () => {
+    setCurrentDate((prev) => moment(prev).add(1, "month").toDate());
+  };
+
+  const handleToday = () => {
+    setCurrentDate(new Date());
+  };
+
+
+  return (
+    <div className="flex">
+      {/* Sidebar */}
+      <Sidebar isSidebarMinimized={isSidebarMinimized} toggleSidebar={toggleSidebar} />
+
+      {/* Main Content */}
+      <div className={`main-content ${isSidebarMinimized ? "minimized" : ""}`}>
+        <div className="flex items-center justify-between"
+        style={{ height: "69px" }}
+        >
+          <div className="flex items-center space-x-8">
+            <h1 className="text-[20px] font-semibold pl-[32px]" style={{ fontFamily: "'Inter', sans-serif" }}>
+              Calendar
+            </h1>
+            <button
+  onClick={handleToday}
+  className="text-[14px] font-normal rounded-[4px]"
+  style={{
+    fontFamily: "'Inter', sans-serif",
+    border: "1px solid #E9EBEF",
+    width: "61px", // Horizontal resizing
+    height: "37px", // Vertical resizing
+  }}
+>
+  Today
+</button>
+            <button
+                onClick={handlePreviousMonth}
+                className="px-2"
+            >
+                    <FaChevronLeft size={16} />
+            </button>
+
+            <button
+                onClick={handleNextMonth} 
+                className="px-2">
+                    <FaChevronRight size={16} />
+            </button>
+
+            <span 
+                className="text-[20px] font-normal text-black"
+                style={{ fontFamily: "'Inter', sans-serif" }}
+            >
+                    {moment(currentDate).format("MMMM YYYY")}
+            </span>
+          </div>
+          <button 
+          className="w-[155px] h-[34px] flex items-center justify-center gap-[10px] px-[10px] py-[10px] rounded-[25px] bg-[#A585FF] text-white hover:bg-[#8060DB]"
+          onClick={() => console.log("Add New Event clicked")}
+        >
+            Add New Event
+          </button>
+        </div>
+        <Calendar
+          localizer={localizer}
+          events={[]}
+          startAccessor="start"
+          endAccessor="end"
+          date={currentDate}
+          onNavigate={(date) => setCurrentDate(moment(date).toDate())}
+          style={{ height: "calc(100vh - 100px)" }}
+          components={{
+            toolbar: () => null, // This removes the toolbar
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default HomePage;
