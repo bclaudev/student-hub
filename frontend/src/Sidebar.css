@@ -1,0 +1,9 @@
+.sidebar {
+    width: 256px; /* Default width when expanded */
+    transition: width 0.3s ease; /* Smooth resizing */
+  }
+  
+  .sidebar.minimized {
+    width: 64px; /* Width when minimized */
+  }
+  
