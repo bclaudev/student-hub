@@ -11,5 +11,9 @@
   },
   "scripts": {
     "dev": "concurrently \"npm run dev --prefix backend\" \"npm start --prefix frontend\" \"npm run tailwind:watch --prefix frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "nodemon": "^3.1.9"
   }
 }
