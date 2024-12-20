@@ -30,6 +30,7 @@ function LoginPage() {
           <h2 className="text-[20px] font-bold text-center mb-6">Login</h2>
 
           {/* Google sign-in */}
+          {/* Google Sign-In Button */}
           <div className="flex justify-center mt-6">
             <div style={{ width: '210px' }}>
               <GoogleLogin
@@ -47,6 +48,7 @@ function LoginPage() {
           <hr className="my-6 border-gray-300 w-full" />
 
           {/* Email or Phone Number field */}
+          {/* Username or Phone Number Form */}
           <form className="space-y-2">
             <div className="relative">
               <User color="#A585FF" className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />

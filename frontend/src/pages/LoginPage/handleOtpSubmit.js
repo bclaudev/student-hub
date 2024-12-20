@@ -31,7 +31,7 @@ export const handleOtpSubmit = async (event, usernameOrPhone, otp, setNotificati
           textColor: '#2E2E2E',
         });
         setTimeout(() => {
-          window.location.href = '/homepage'; // Redirect after a short delay
+          window.location.href = '/dashboard'; // Redirect after a short delay
         }, 2000);
       } else {
         setNotification({
