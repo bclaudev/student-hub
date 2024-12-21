@@ -7,6 +7,8 @@
   top: 0;
   left: 0;
   border-right: 1px solid #e9ebef; /* Add stroke to the right */
+  display: flex;
+  flex-direction: column; /* Align items vertically */
 }
 
 .sidebar.minimized {
@@ -15,7 +17,6 @@
 
 .main-content {
   flex: 1;
-  margin-left: 256px;
   transition: margin-left 0.3s ease;
 }
 
@@ -71,4 +72,45 @@ li.inactive:hover {
   font-family: "Inter", sans-serif;
   font-size: 14px;
   font-weight: 400;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center; /* Align picture and text side-by-side */
+  padding: 16px; /* Space around the profile section */
+}
+
+.profile-picture {
+  width: 50px; /* Circle size */
+  height: 50px;
+  border-radius: 50%; /* Make it a circle */
+  background-color: #e0e0e0; /* Placeholder background */
+}
+
+.profile-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Align text to match the picture's height */
+  margin-left: 16px; /* Space between picture and text */
+}
+
+.profile-greeting {
+  font-family: "Inter", sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  color: #0f0f0f; /* Dark text */
+  margin: 0;
+}
+
+.profile-settings {
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: light;
+  color: #C3C3C3; /* Gray text */
+  text-decoration: none;
+  margin-top: 2px;
+}
+
+.profile-settings:hover {
+  color: #9b9b9b /* Optional hover effect */
 }

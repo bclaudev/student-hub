@@ -2,9 +2,12 @@ import React from "react";
 import { Clipboard, Calendar, Book, Edit, LogOut } from "react-feather";
 import { Link, useLocation } from "react-router-dom";
 import "../Sidebar.css";
+import UserAvatar from "./UserAvatar.js";
+
 
 const Sidebar = ({ isSidebarMinimized, toggleSidebar }) => {
   const location = useLocation(); // Get current route
+  const userName = "Claudia";
 
   const navItems = [
     { label: "Timetable", icon: Clipboard, path: "/timetable" },
@@ -16,6 +19,17 @@ const Sidebar = ({ isSidebarMinimized, toggleSidebar }) => {
 
   return (
     <div className={`sidebar ${isSidebarMinimized ? "minimized" : ""}`}>
+      <div className="profile-section flex items-center space-x-4 p-4 border-b border-gray-300">
+        <UserAvatar name={userName || "Anonymous"} size={64} />
+        {!isSidebarMinimized && (
+          <div>
+            <p className="text-lg font-semibold">Hello, {userName || "User"}</p>
+            <p className="text-sm cursor-pointer">
+              Change profile settings
+            </p>
+          </div>
+        )}
+      </div>
       <div className="flex items-center justify-between p-4 border-b border-gray-200">
         {!isSidebarMinimized}
       </div>
