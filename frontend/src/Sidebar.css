@@ -1,24 +1,74 @@
 .sidebar {
-    width: 256px; /* Default width when expanded */
-    height: 100vh; /* Full viewport height */
-    background-color: #f5f5f5; /* Example background color */
-    transition: width 0.3s ease; /* Smooth resizing */
-    position: fixed; /* Fixed positioning */
-    top: 0;
-    left: 0;
-  }
-  
-  .sidebar.minimized {
-    width: 64px; /* Width when minimized */
-  }
-  
-  .main-content {
-    flex: 1; /* Takes remaining space */
-    margin-left: 256px; /* Default margin for expanded sidebar */
-    transition: margin-left 0.3s ease;
-  }
-  
-  .sidebar.minimized ~ .main-content {
-    margin-left: 64px; /* Adjust margin for minimized sidebar */
-  }
-  
+  width: 256px;
+  height: 100vh;
+  background-color: #ffffff; /* White background */
+  transition: width 0.3s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-right: 1px solid #e9ebef; /* Add stroke to the right */
+}
+
+.sidebar.minimized {
+  width: 64px;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 256px;
+  transition: margin-left 0.3s ease;
+}
+
+.sidebar.minimized ~ .main-content {
+  margin-left: 64px;
+}
+
+/* Sidebar list styles */
+ul {
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Remove default margin */
+}
+
+li {
+  display: flex;
+  align-items: center;
+  justify-content: start; /* Center content horizontally */
+  width: 190px; /* Fixed width */
+  height: 37px; /* Fixed height */
+  margin: 0 36px; /* Margin from the edges of the sidebar */
+  padding: 0; /* Remove extra padding */
+  border-radius: 16px; /* Rounded corners */
+  transition: background-color 0.3s ease;
+}
+
+/* Active state styles */
+li.active {
+  background-color: #f7f8fa;
+}
+
+.icon-active {
+  color: #a585ff;
+}
+
+.text-active {
+  color: #0f0f0f;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/* Inactive state styles */
+li.inactive:hover {
+  background-color: #f7f8fa;
+}
+
+.icon-inactive {
+  color: #667288;
+}
+
+.text-inactive {
+  color: #667288;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+}
