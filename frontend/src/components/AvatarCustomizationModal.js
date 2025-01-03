@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+//frontend/src/components/AvatarCustomizationModal.js
+import React, { useState, useEffect } from "react";
+import '../AvatarCustomizationModal.css';
 
 const AvatarCustomizationModal = ({ currentConfig, onClose, onSave }) => {
   const [tempConfig, setTempConfig] = useState(currentConfig);
@@ -11,16 +13,31 @@ const AvatarCustomizationModal = ({ currentConfig, onClose, onSave }) => {
     });
   };
 
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg p-6 w-[400px] shadow-lg">
-        <h2 className="text-lg font-bold mb-4">Customize Your Avatar</h2>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            onSave(tempConfig);
-          }}
-        >
+<div
+  className="fixed inset-0 modal-overlay flex items-center justify-center"
+  onClick={onClose}
+>
+  <div
+    className="modal-container relative"
+    style={{ zIndex: 10001 }}
+    onClick={(e) => e.stopPropagation()} // Prevent click inside modal from closing
+  >
+    <h2 className="text-lg font-bold mb-4">Customize Your Avatar</h2>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSave(tempConfig);
+      }}
+    >
           <div className="mb-4">
             <label className="block mb-2 text-sm font-medium text-gray-700">
               Name

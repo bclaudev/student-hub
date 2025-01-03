@@ -1,0 +1,12 @@
+.custom-event {
+    padding: 5px;
+    border-radius: 4px;
+    background-color: #A585FF;
+    color: white;
+    font-size: 12px;
+  }
+  
+  .custom-event p {
+    margin: 0;
+  }
+  

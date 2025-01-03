@@ -4,10 +4,9 @@ import { Link, useLocation } from "react-router-dom";
 import "../Sidebar.css";
 import UserAvatar from "./UserAvatar.js";
 
-
 const Sidebar = ({ isSidebarMinimized, toggleSidebar }) => {
   const location = useLocation(); // Get current route
-  const userName = "Claudia";
+  const userName = "Claudia"; // Static username for now
 
   const navItems = [
     { label: "Timetable", icon: Clipboard, path: "/timetable" },
@@ -24,14 +23,8 @@ const Sidebar = ({ isSidebarMinimized, toggleSidebar }) => {
         {!isSidebarMinimized && (
           <div>
             <p className="text-lg font-semibold">Hello, {userName || "User"}</p>
-            <p className="text-sm cursor-pointer">
-              Change profile settings
-            </p>
           </div>
         )}
-      </div>
-      <div className="flex items-center justify-between p-4 border-b border-gray-200">
-        {!isSidebarMinimized}
       </div>
       <ul className="mt-4 space-y-2">
         {navItems.map((item) => {

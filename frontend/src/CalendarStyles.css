@@ -1,4 +1,4 @@
-/* CalendarStyles.css */
+/* frontend/src/CalendarStyles.css */
 .rbc-header {
     font-family: "Inter", serif; /* Replace with your desired font */
     font-size: 24px; /* Adjust size as needed */
@@ -80,3 +80,26 @@
         font-family: 'Inter', sans-serif;
         z-index: 1; /* Ensure it appears above the rest of the content */
     }
+
+    .rbc-calendar {
+      position: relative; /* Creates a stacking context */
+      z-index: 1; /* Lower stacking priority */
+    }
+    
+    .rbc-day-bg {
+      position: relative; /* Keep background strokes in context */
+      z-index: 1;
+    }
+    
+    .rbc-date-cell {
+      position: relative; /* Ensure text stays below modal */
+      z-index: 1;
+    }
+
+    .rbc-off-range-bg {
+      z-index: 0; /* Make sure off-range backgrounds stay behind */
+  }
+  
+  .rbc-day-bg {
+      z-index: 0; /* Ensure day backgrounds stay below the modal */
+  }
