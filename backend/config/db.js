@@ -1,3 +1,4 @@
+//backend/config/db.js
 import { drizzle } from 'drizzle-orm/node-postgres';
 import pkg from 'pg';
 import { config } from 'dotenv';
