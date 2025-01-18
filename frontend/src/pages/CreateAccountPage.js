@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header.js';
 import NotificationCard from '../components/NotificationCard.js';
-import handleRegistration from './CreateAccountPage/handleRegistration.js';
+import handleRegistration from './CreateAccountPage/handleRegistration.js'; // Import the function
 
 const CreateAccountPage = () => {
   const [step, setStep] = useState(1);
@@ -76,8 +76,7 @@ const CreateAccountPage = () => {
     return true;
   };
 
-  const handleNext = (e) => {
-    e.preventDefault(); // Prevent any unintended submission
+  const handleNext = () => {
     if (validateStep()) setStep((prevStep) => prevStep + 1);
   };
 
@@ -85,9 +84,9 @@ const CreateAccountPage = () => {
     setStep((prevStep) => prevStep - 1);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
-    await handleRegistration(e, formData, setNotification);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleRegistration(e, formData, setNotification); // Use the imported function
   };
 
   return (
@@ -203,14 +202,14 @@ const CreateAccountPage = () => {
             {step < 3 ? (
               <button
                 type="button"
-                onClick={handleNext} // Prevent form submission
+                onClick={handleNext}
                 className="px-4 py-2 bg-customPurple text-white rounded hover:bg-[#8060DB]"
               >
                 Next
               </button>
             ) : (
               <button
-                type="submit" // Submit on the last step
+                type="submit"
                 className="px-4 py-2 bg-customPurple text-white rounded hover:bg-[#8060DB]"
               >
                 Register

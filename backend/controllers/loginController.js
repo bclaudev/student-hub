@@ -1,50 +1,40 @@
-import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt'; // For password comparison
 import { db } from '../config/db.js';
-import { eq } from 'drizzle-orm';
-import { usersTable } from '../schema/users.js';
-import bcrypt from 'bcrypt';
+import { users } from '../schema/users.js'; // Import your Drizzle schema for the users table
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const [user] = await db
+    //Find user by email
+    const user = await db
       .select()
-      .from(usersTable)
-      .where(eq(usersTable.email, email));
+      .from(users)
+      .where(users.email.eq(email))
+      .limit(1);
 
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+    if (user.length === 0) {
+      return res.status(401).json({ message: 'Invalid email or password.' });
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
+    //Compare password
+    const passwordMatch = await bcrypt.compare(password, user[0].password);
+
     if (!passwordMatch) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: 'Invalid email or password.' });
     }
 
-    // Generate a JWT token
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-      expiresIn: '1d',
-    });
-
-    // Set the token in a cookie
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Strict',
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
-    });
-
+    // Successful login
     res.status(200).json({
-      message: 'Login successful',
+      message: 'Login successful!',
       user: {
-        id: user.id,
-        email: user.email,
-        name: `${user.firstName} ${user.lastName}`,
+        id: user[0].id,
+        email: user[0].email,
+        name: `${user[0].firstName} ${user[0].lastName}`,
       },
     });
   } catch (error) {
     console.error('Error during login:', error);
-    res.status(500).json({ message: 'An error occurred during login' });
+    res.status(500).json({ message: 'An error occurred. Please try again later.' });
   }
 };

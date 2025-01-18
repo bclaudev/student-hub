@@ -614,6 +614,14 @@ video {
   margin-left: 1rem;
 }
 
+.ml-\[256px\] {
+  margin-left: 256px;
+}
+
+.ml-\[64px\] {
+  margin-left: 64px;
+}
+
 .mr-2 {
   margin-right: 0.5rem;
 }
@@ -628,14 +636,6 @@ video {
 
 .mt-6 {
   margin-top: 1.5rem;
-}
-
-.ml-\[256px\] {
-  margin-left: 256px;
-}
-
-.ml-\[64px\] {
-  margin-left: 64px;
 }
 
 .block {
@@ -780,6 +780,10 @@ video {
 
 .rounded-\[4px\] {
   border-radius: 4px;
+}
+
+.rounded-full {
+  border-radius: 9999px;
 }
 
 .rounded-lg {

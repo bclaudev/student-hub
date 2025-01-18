@@ -1,31 +1,22 @@
 import React from "react";
 
-const UserAvatar = ({ name = "User", size = 64 }) => {
+const UserAvatar = ({ name, size }) => {
   const initials = name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase();
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+
+  const avatarUrl = `https://ui-avatars.com/api/?name=${initials}&size=${size * 2}&background=random&color=fff`;
 
   return (
-      <div
-          style={{
-              width: size,
-              height: size,
-              borderRadius: "50%",
-              backgroundColor: "#A585FF",
-              color: "#fff",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: size / 2,
-              fontWeight: "bold",
-          }}
-      >
-          {initials}
-      </div>
+    <img
+      src={avatarUrl}
+      alt="User Avatar"
+      className="rounded-full"
+      style={{ width: size, height: size }}
+    />
   );
 };
 
 export default UserAvatar;
-
