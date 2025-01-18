@@ -1,24 +1,24 @@
 import bcrypt from 'bcrypt'; // For password comparison
-import { db } from '../config/db.js';
-import { users } from '../schema/users.js'; // Import your Drizzle schema for the users table
+import { db } from '../config/db.js'; // Import the database instance
+import { usersTable } from '../schema/users.js'; // Import the users table
+import { eq } from 'drizzle-orm'; // Import the `eq` operator
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    //Find user by email
-    const user = await db
+    // Find user by email
+    const [user] = await db
       .select()
-      .from(users)
-      .where(users.email.eq(email))
-      .limit(1);
+      .from(usersTable)
+      .where(eq(usersTable.email, email)); // Use eq for equality check
 
-    if (user.length === 0) {
+    if (!user) {
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
 
-    //Compare password
-    const passwordMatch = await bcrypt.compare(password, user[0].password);
+    // Compare password
+    const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
       return res.status(401).json({ message: 'Invalid email or password.' });
@@ -28,9 +28,9 @@ export const login = async (req, res) => {
     res.status(200).json({
       message: 'Login successful!',
       user: {
-        id: user[0].id,
-        email: user[0].email,
-        name: `${user[0].firstName} ${user[0].lastName}`,
+        id: user.id,
+        email: user.email,
+        name: `${user.firstName} ${user.lastName}`,
       },
     });
   } catch (error) {

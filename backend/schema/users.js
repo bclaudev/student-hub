@@ -1,4 +1,4 @@
-import { pgTable, serial, text, integer, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, integer, timestamp, date } from "drizzle-orm/pg-core";
 
 export const usersTable = pgTable("users", {
   id: serial("id").primaryKey(),
@@ -8,4 +8,5 @@ export const usersTable = pgTable("users", {
   password: text("password").notNull(),
   uploadSize: integer("upload_size").default(0),
   createdAt: timestamp("created_at").defaultNow(),
+  dateOfBirth: date("date_of_birth").notNull(),
 });

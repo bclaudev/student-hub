@@ -1,10 +1,13 @@
 // backend/routes/auth.js
+// backend/routes/auth.js
 import express from 'express';
-import { sendOtp, verifyOtp } from '../controllers/authController.js';
+import { login } from '../controllers/loginController.js';
+import { registerUser } from '../controllers/registerController.js';
 
 const router = express.Router();
 
-router.post('/send-otp', sendOtp);
-router.post('/verify-otp', verifyOtp);
+// Define routes for login and registration
+router.post('/login', login);
+router.post('/register', registerUser);
 
 export default router;

@@ -10,7 +10,7 @@ const CreateAccountPage = () => {
     firstName: '',
     lastName: '',
     email: '',
-    dob: '',
+    dateOfBirth: '',
     password: '',
     confirmPassword: '',
     agreeTerms: false,
@@ -140,8 +140,8 @@ const CreateAccountPage = () => {
               <div>
                 <input
                   type="date"
-                  id="dob"
-                  value={formData.dob}
+                  id="dateOfBirth"
+                  value={formData.dateOfBirth}
                   onChange={handleInputChange}
                   className="block w-full px-3 py-2 border border-gray-300 rounded-[12px] shadow-sm focus:ring-customPurple focus:ring-1 focus:border-customPurple focus:outline-none"
                 />
