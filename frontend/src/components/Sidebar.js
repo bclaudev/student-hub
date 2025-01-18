@@ -1,20 +1,35 @@
 import React from "react";
 import { Clipboard, Calendar, Book, Edit, LogOut } from "react-feather";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../Sidebar.css";
 import UserAvatar from "./UserAvatar.js";
 
-const Sidebar = ({ isSidebarMinimized, toggleSidebar, user }) => {
-  const location = useLocation(); // Get current route
-  const userName = user?.name?.split(' ')[0] || 'User'; // Extract first name or fallback to "User"
-  console.log("Sidebar user prop:", user);
-  
+const Sidebar = ({ isSidebarMinimized, toggleSidebar, user, setUser }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await fetch("http://localhost:4000/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+
+        setUser(null); // Clear user data
+        navigate("/login"); // Redirect to login page
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
+
+  const userName = user?.firstName || "User";
+
   const navItems = [
     { label: "Timetable", icon: Clipboard, path: "/timetable" },
     { label: "Calendar", icon: Calendar, path: "/calendar" },
     { label: "Resources", icon: Book, path: "/resources" },
     { label: "Notebooks", icon: Edit, path: "/notebooks" },
-    { label: "Logout", icon: LogOut, path: "/logout" },
+    { label: "Logout", icon: LogOut, action: handleLogout },
   ];
 
   return (
@@ -38,6 +53,7 @@ const Sidebar = ({ isSidebarMinimized, toggleSidebar, user }) => {
               className={`flex items-center px-4 py-2 ${
                 isActive ? "active" : "inactive"
               }`}
+              onClick={item.action ? item.action : undefined} // Call action if defined
             >
               <Icon size={20} className={`${isActive ? "icon-active" : "icon-inactive"}`} />
               {!isSidebarMinimized && (

@@ -10,12 +10,27 @@ const router = express.Router();
 router.post('/login', login);
 router.post('/register', registerUser);
 
-router.get('/me', verifyToken, (req, res) => {
-    res.status(200).json({
-      id: req.user.id,
-      email: req.user.email,
-      name: req.user.name,
+router.get('/me', verifyToken, async (req, res) => {
+    try {
+      res.status(200).json({
+        id: req.user.id,
+        firstName: req.user.firstName,
+        lastName: req.user.lastName,
+        email: req.user.email,
+      });
+    } catch (error) {
+      console.error('Error in /me route:', error);
+      res.status(500).json({ message: 'Failed to fetch user data' });
+    }
+  });
+
+router.post('/logout', (req, res) => {
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'Strict',
     });
+    res.status(200).json({ message: 'Logged out successfully' });
   });
 
 export default router;

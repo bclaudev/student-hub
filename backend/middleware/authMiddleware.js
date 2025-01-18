@@ -9,7 +9,12 @@ export const verifyToken = (req, res, next) => {
   
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = decoded; // Attach user data to the request object
+      req.user = {
+        id: decoded.id,
+        firstName: decoded.firstName,
+        lastName: decoded.lastName,
+        email: decoded.email,
+      };
       next();
     } catch (error) {
       console.error('Error verifying token:', error);

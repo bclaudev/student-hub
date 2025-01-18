@@ -1,3 +1,4 @@
+//backend/controllers/loginController.js
 import bcrypt from 'bcrypt'; // For password comparison
 import jwt from 'jsonwebtoken'; // For creating JWT tokens
 import { db } from '../config/db.js';
@@ -27,26 +28,31 @@ export const login = async (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign(
-      { id: user.id, email: user.email, name: `${user.firstName} ${user.lastName}` },
+      {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+      },
       process.env.JWT_SECRET,
-      { expiresIn: '1h' } // Token validity
+      { expiresIn: '12h' }
     );
 
-    // Send cookie
+    // Set the token as a cookie
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-      sameSite: 'Strict', // Prevent CSRF
+      secure: false, // Set to true in production
+      sameSite: 'Strict',
     });
 
-    // Successful login response
-    res.status(200).json({
+    res.status(200).json({ 
       message: 'Login successful!',
       user: {
         id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
-        name: `${user.firstName} ${user.lastName}`,
-      },
+      } 
     });
   } catch (error) {
     console.error('Error during login:', error);
