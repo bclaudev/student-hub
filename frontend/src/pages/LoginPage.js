@@ -11,13 +11,25 @@ function LoginPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (notification) {
-      const timer = setTimeout(() => {
-        setNotification(null);
-      }, 10000);
-      return () => clearTimeout(timer);
-    }
-  }, [notification]);
+    const fetchUser = async () => {
+      try {
+        const response = await fetch('http://localhost:4000/api/auth/me', {
+          method: 'GET',
+          credentials: 'include', // Include cookies in the request
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data); // Update user state
+        } else {
+          console.error('Failed to authenticate');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+  
+    fetchUser();
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();

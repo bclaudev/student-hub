@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt'; // For password comparison
-import { db } from '../config/db.js'; // Import the database instance
-import { usersTable } from '../schema/users.js'; // Import the users table
-import { eq } from 'drizzle-orm'; // Import the `eq` operator
+import jwt from 'jsonwebtoken'; // For creating JWT tokens
+import { db } from '../config/db.js';
+import { usersTable } from '../schema/users.js';
+import { eq } from 'drizzle-orm';
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -11,7 +12,7 @@ export const login = async (req, res) => {
     const [user] = await db
       .select()
       .from(usersTable)
-      .where(eq(usersTable.email, email)); // Use eq for equality check
+      .where(eq(usersTable.email, email));
 
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password.' });
@@ -24,7 +25,21 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
 
-    // Successful login
+    // Generate JWT token
+    const token = jwt.sign(
+      { id: user.id, email: user.email, name: `${user.firstName} ${user.lastName}` },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' } // Token validity
+    );
+
+    // Send cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+      sameSite: 'Strict', // Prevent CSRF
+    });
+
+    // Successful login response
     res.status(200).json({
       message: 'Login successful!',
       user: {

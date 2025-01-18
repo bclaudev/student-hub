@@ -4,6 +4,7 @@ import authRoutes from './routes/auth.js';
 import { config } from 'dotenv';
 import pkg from 'pg';
 import { drizzle } from 'drizzle-orm/node-postgres';
+import cookieParser from 'cookie-parser';
 
 config(); // Load environment variables
 
@@ -11,6 +12,8 @@ const { Pool } = pkg; // Destructure Pool from the imported 'pg' package
 
 const app = express();
 const port = 4000;
+
+app.use(cookieParser());
 
 // Enable CORS and JSON parsing
 app.use(

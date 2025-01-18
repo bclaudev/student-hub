@@ -4,10 +4,11 @@ import { Link, useLocation } from "react-router-dom";
 import "../Sidebar.css";
 import UserAvatar from "./UserAvatar.js";
 
-const Sidebar = ({ isSidebarMinimized, toggleSidebar }) => {
+const Sidebar = ({ isSidebarMinimized, toggleSidebar, user }) => {
   const location = useLocation(); // Get current route
-  const userName = "Claudia"; // Static username for now
-
+  const userName = user?.name?.split(' ')[0] || 'User'; // Extract first name or fallback to "User"
+  console.log("Sidebar user prop:", user);
+  
   const navItems = [
     { label: "Timetable", icon: Clipboard, path: "/timetable" },
     { label: "Calendar", icon: Calendar, path: "/calendar" },
@@ -19,10 +20,10 @@ const Sidebar = ({ isSidebarMinimized, toggleSidebar }) => {
   return (
     <div className={`sidebar ${isSidebarMinimized ? "minimized" : ""}`}>
       <div className="profile-section flex items-center space-x-4 p-4 border-b border-gray-300">
-        <UserAvatar name={userName || "Anonymous"} size={64} />
+        <UserAvatar name={userName} size={64} />
         {!isSidebarMinimized && (
           <div>
-            <p className="text-lg font-semibold">Hello, {userName || "User"}</p>
+            <p className="text-lg font-semibold">Hello, {userName}</p>
           </div>
         )}
       </div>
