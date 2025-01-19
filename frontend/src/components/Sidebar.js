@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'; // Ensure useEffect is imported
-import { Clipboard, Calendar, Book, Edit, LogOut } from "react-feather";
+import { Clipboard, Calendar, Book, Edit, LogOut , ChevronRight , ChevronLeft} from "react-feather";
 import { Link, useLocation } from "react-router-dom";
 import "../Sidebar.css";
 import UserAvatar from "./UserAvatar.js";
@@ -24,15 +24,17 @@ const Sidebar = ({ isSidebarMinimized, toggleSidebar, user, handleLogout }) => {
 
   return (
     <div className={`sidebar ${isSidebarMinimized ? "minimized" : ""}`}>
-      <div className="profile-section flex items-center space-x-4 p-4 border-b border-gray-300">
-        <UserAvatar name={userName} size={64} />
+
+      <div className={`profile-section ${isSidebarMinimized ? "minimized-profile" : ""}`}>
+        <UserAvatar name={userName} size={42} />
         {!isSidebarMinimized && (
-          <div>
+          <div class="profile-details">
             <p className="text-lg font-semibold">Hello, {userName}</p>
+            <button className="profile-settings">Change profile settings</button>
           </div>
         )}
       </div>
-      <ul className="mt-4 space-y-2">
+      <ul className={`nav-items ${isSidebarMinimized ? "centered-icons" : ""}`}>
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
@@ -40,21 +42,51 @@ const Sidebar = ({ isSidebarMinimized, toggleSidebar, user, handleLogout }) => {
           return (
             <li
               key={item.label}
-              className={`flex items-center px-4 py-2 ${
-                isActive ? "active" : "inactive"
-              }`}
-              onClick={item.action ? item.action : undefined} // Call action if defined
+              className={`flex items-center ${
+                isSidebarMinimized ? "justify-center" : "px-4"
+              } py-2 ${isActive ? "active" : "inactive"}`}
+              onClick={item.action ? item.action : undefined} // Ensure action is called
             >
-              <Icon size={20} className={`${isActive ? "icon-active" : "icon-inactive"}`} />
-              {!isSidebarMinimized && (
-                <Link to={item.path} className={`ml-4 ${isActive ? "text-active" : "text-inactive"}`}>
-                  {item.label}
-                </Link>
-              )}
+              <Link
+                to={item.action ? "#" : item.path} // Use "#" for Logout to avoid navigation
+                className={`flex justify-center items-center ${
+                  isSidebarMinimized ? "icon-link-minimized" : "ml-4"
+                }`}
+                onClick={item.action ? item.action : undefined} // Call action on click
+              >
+                <Icon
+                  size={20}
+                  className={`${isActive ? "icon-active" : "icon-inactive"}`}
+                />
+                {!isSidebarMinimized && (
+                  <span className={`${isActive ? "text-active" : "text-inactive"}`}>
+                    {item.label}
+                  </span>
+                )}
+              </Link>
             </li>
           );
         })}
       </ul>
+
+      {/* Minimize Button at Bottom */}
+      <div className="minimize-icon-container">
+        {isSidebarMinimized ? (
+          <ChevronRight
+            size={24}
+            onClick={toggleSidebar}
+            className="minimize-icon"
+            aria-label="Expand Sidebar"
+          />
+        ) : (
+          <ChevronLeft
+            size={24}
+            onClick={toggleSidebar}
+            className="minimize-icon"
+            aria-label="Minimize Sidebar"
+          />
+        )}
+      </div>
     </div>
   );
 };

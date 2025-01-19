@@ -1,5 +1,5 @@
 .sidebar {
-  width: 256px;
+  width: 263px;
   height: 100vh;
   background-color: #ffffff; /* White background */
   transition: width 0.3s ease;
@@ -9,10 +9,13 @@
   border-right: 1px solid #e9ebef; /* Add stroke to the right */
   display: flex;
   flex-direction: column; /* Align items vertically */
+  align-items: center;
+  justify-content: space-between;
 }
 
 .sidebar.minimized {
   width: 64px;
+  overflow: hidden;
 }
 
 .main-content {
@@ -22,6 +25,125 @@
 
 .sidebar.minimized ~ .main-content {
   margin-left: 64px;
+}
+
+.sidebar.minimized ~ .nav-items {
+  display: flex;
+  flex-direction: column; /* Stack icons vertically */
+  justify-content: center; /* Vertically center the list */
+  align-items: center; /* Horizontally center the icons */
+  padding: 0; /* Remove extra padding */
+  margin: 0; /* Remove any margins */
+  height: 100%; /* Fill the sidebar height */
+}
+
+.nav-items {
+  flex: 1;
+}
+
+.nav-items li {
+  margin-bottom: 10px;
+}
+
+.nav-items li .text-active,
+.nav-items li .text-inactive {
+  margin-left: 12px;
+}
+.icon-active {
+  color: #a585ff; /* Purple */
+}
+
+/* Inactive icon color: Grey */
+.icon-inactive {
+  color: #667288; /* Grey */
+}
+
+/* Minimized Sidebar: Explicitly set active/inactive icon colors */
+.sidebar.minimized .icon-active {
+  color: #a585ff !important; /* Force active color in minimized state */
+}
+
+.sidebar.minimized .icon-inactive {
+  color: #667288 !important; /* Force inactive color in minimized state */
+}
+
+/* Maximized Sidebar: Explicitly set active/inactive icon colors */
+.sidebar:not(.minimized) .icon-active {
+  color: #a585ff; /* Active purple color */
+}
+
+.sidebar:not(.minimized) .icon-inactive {
+  color: #667288; /* Inactive grey color */
+}
+
+.sidebar.minimized li {
+  display: flex;
+  justify-content: center; /* Center icons horizontally */
+  align-items: center; /* Center icons vertically */
+  width: 100%; /* Constrain the width to the sidebar */
+  height: 37px; /* Optional: Set a fixed height for each item */
+  margin: 0; /* Remove extra margins */
+  padding: 0; /* Remove padding */
+  overflow: hidden; /* Prevent overflow */
+}
+
+
+
+.sidebar.minimized .text-active,
+.sidebar.minimized .text-inactive {
+  display: none; /* Completely hide text */
+}
+
+.sidebar.minimized .minimize-icon-container {
+  margin-bottom:20px;
+}
+
+.sidebar:not(.minimized) .minimize-icon-container {
+  position: absolute; /* Position it relative to the sidebar */
+  right: 40px; /* Add 40px margin from the right edge */
+  bottom: 20px; /* Position it 20px above the bottom of the sidebar */
+  display: flex;
+  align-items: center; /* Center the chevron vertically within its container */
+}
+
+.minimize-icon {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.minimize-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Minimized sidebar: Adjust margin if needed */
+.sidebar.minimized .profile-section {
+  margin-bottom: 50px; /* Reduce margin in minimized mode */
+}
+
+.nav-items li:last-child {
+  margin-top: 50px; /* Add 5px space above the Logout button */
+}
+
+.sidebar.minimized .nav-items li {
+  margin-bottom: 10px;
+}
+
+.sidebar:not(.minimized) .nav-items li:last-child {
+  margin-top: 50px;
+}
+
+/* Minimized state: No extra spacing needed */
+.sidebar.minimized .nav-items li:last-child {
+  margin-top: 50px;
+}
+
+
+.border-gray-300 {
+  --tw-border-opacity: 0;
+}
+
+.border-b {
+  border-bottom-width: 0px;
 }
 
 /* Sidebar list styles */
@@ -59,6 +181,18 @@ li.active {
 }
 
 /* Inactive state styles */
+.minimize-icon {
+  color: #667288; /* Same grey as inactive nav icons */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover Effect: Same as nav li items */
+.minimize-icon:hover {
+  background-color: #f7f8fa; /* Light grey background like nav items */
+  border-radius: 8px; /* Add rounded effect like nav items */
+}
+
 li.inactive:hover {
   background-color: #f7f8fa;
 }
@@ -76,13 +210,20 @@ li.inactive:hover {
 
 .profile-section {
   display: flex;
-  align-items: center; /* Align picture and text side-by-side */
-  padding: 16px; /* Space around the profile section */
+  align-items: center;
+  justify-content: center;
+  padding-top: 50px !important;
+  padding-bottom: 50px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  width: 192px;
+  height: 134px;
+  margin-bottom: 50px;
 }
 
 .profile-picture {
-  width: 50px; /* Circle size */
-  height: 50px;
+  width: 10px; /* Circle size */
+  height: 10px;
   border-radius: 50%; /* Make it a circle */
   background-color: #e0e0e0; /* Placeholder background */
 }
@@ -91,7 +232,11 @@ li.inactive:hover {
   display: flex;
   flex-direction: column;
   justify-content: center; /* Align text to match the picture's height */
-  margin-left: 16px; /* Space between picture and text */
+  margin-left: 8px !important; /* Space between picture and text */
+}
+
+.minimized-profile .profile-text {
+  display: none; /* Hide the text in minimized mode */
 }
 
 .profile-greeting {
@@ -100,17 +245,28 @@ li.inactive:hover {
   font-weight: bold;
   color: #0f0f0f; /* Dark text */
   margin: 0;
+  margin-bottom: 0px;
+  letter-spacing: 0%;
 }
 
 .profile-settings {
   font-family: "Inter", sans-serif;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: light;
   color: #C3C3C3; /* Gray text */
   text-decoration: none;
-  margin-top: 2px;
+  text-align: left;
+  padding: 0px;
 }
 
 .profile-settings:hover {
   color: #9b9b9b /* Optional hover effect */
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column; /* Stack greeting and settings vertically */
+  justify-content: center;
+  align-items: flex-start; /* Center them horizontally */
+  margin-left: 8px; /* Space between avatar and text */
 }
