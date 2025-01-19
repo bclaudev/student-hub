@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage.js';
@@ -8,9 +7,10 @@ import Sidebar from './components/Sidebar.js';
 import { useNavigate } from 'react-router-dom';
 
 function App() {
-  const location = useLocation(); // Declare location at the top
+  const location = useLocation();
   const [isSidebarMinimized, setIsSidebarMinimized] = useState(false);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const fetchUser = async () => {
@@ -24,16 +24,19 @@ function App() {
         const data = await response.json();
         setUser(data);
       } else {
-        console.warn('User not authenticated. Redirecting to login...');
         setUser(null);
-        navigate('/login'); // Only redirect if not already on login
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
       setUser(null);
-      navigate('/login');
+    } finally {
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -43,8 +46,8 @@ function App() {
       });
 
       if (response.ok) {
-        navigate("/login"); // Redirect to login
-        setTimeout(() => setUser(null), 0); // Clear user state
+        navigate("/login");
+        setUser(null);
       } else {
         console.error("Logout failed:", await response.text());
       }
@@ -53,34 +56,33 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    fetchUser();
-  }, [location.pathname]); // Use location.pathname safely after declaration
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-  const showSidebar = user && location.pathname !== '/login' && location.pathname !== '/create-account';
-
-  const ProtectedRoute = ({ element }) => {
-    return user ? element : <Navigate to="/login" />;
-  };
-
-  console.log('setUser in App.js:', typeof setUser);
+  const showSidebar = user && !['/login', '/create-account'].includes(location.pathname);
 
   return (
     <div className="app flex">
-      {showSidebar && user && (
+      {showSidebar && (
         <Sidebar
           user={user}
           setUser={setUser}
           isSidebarMinimized={isSidebarMinimized}
           toggleSidebar={() => setIsSidebarMinimized(!isSidebarMinimized)}
-          handleLogout={handleLogout} // Pass handleLogout as a prop
+          handleLogout={handleLogout}
         />
       )}
       <div className={`flex-1 ${isSidebarMinimized ? 'ml-[64px]' : 'ml-[256px]'}`}>
         <Routes>
-          <Route path="/login" element={<LoginPage setUser={setUser} />} />
+          <Route path="/login" element={<LoginPage setUser={setUser} fetchUser={fetchUser} />} />
           <Route path="/create-account" element={<CreateAccountPage />} />
-          <Route path="/calendar" element={<ProtectedRoute element={<HomePage />} />} />
+          <Route
+            path="/calendar"
+            element={
+              <HomePage user={user} setUser={setUser} handleLogout={handleLogout} />
+            }
+          />
         </Routes>
       </div>
     </div>

@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect } from 'react'; // Ensure useEffect is imported
 import { Clipboard, Calendar, Book, Edit, LogOut } from "react-feather";
 import { Link, useLocation } from "react-router-dom";
 import "../Sidebar.css";
 import UserAvatar from "./UserAvatar.js";
 
 const Sidebar = ({ isSidebarMinimized, toggleSidebar, user, handleLogout }) => {
+  useEffect(() => {
+    console.log('Sidebar updated user:', user);
+  }, [user]);
   const location = useLocation();
   console.log('setUser in Sidebar.js:', typeof handleLogout);
   console.log(user);

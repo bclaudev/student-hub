@@ -4,14 +4,14 @@ import Header from '../components/Header.js';
 import { useNavigate } from 'react-router-dom'; // For navigation after login
 import { User, Key } from 'react-feather';
 
-function LoginPage({ setUser }) { // Receive setUser as a prop
+function LoginPage({ setUser, fetchUser }) { // Receive setUser and fetchUser as props
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [notification, setNotification] = useState(null);
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const handleLogin = async (event) => {
+    event.preventDefault(); // Prevent page reload
 
     if (!email || !password) {
       setNotification({
@@ -34,14 +34,8 @@ function LoginPage({ setUser }) { // Receive setUser as a prop
       });
 
       if (response.ok) {
-        const data = await response.json();
-
-        // Update the global user state if setUser is provided
-        if (typeof setUser === 'function') {
-          setUser(data.user);
-        }
-
-        navigate('/calendar'); // Redirect to the calendar page
+        await fetchUser(); // Fetch user data immediately after login
+        navigate('/calendar'); // Redirect to /calendar
       } else {
         const errorData = await response.json();
         setNotification({
