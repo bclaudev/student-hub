@@ -1,26 +1,13 @@
 import React from "react";
 import { Clipboard, Calendar, Book, Edit, LogOut } from "react-feather";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "../Sidebar.css";
 import UserAvatar from "./UserAvatar.js";
 
-const Sidebar = ({ isSidebarMinimized, toggleSidebar, user, setUser }) => {
+const Sidebar = ({ isSidebarMinimized, toggleSidebar, user, handleLogout }) => {
   const location = useLocation();
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    try {
-      await fetch("http://localhost:4000/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-
-        setUser(null); // Clear user data
-        navigate("/login"); // Redirect to login page
-    } catch (error) {
-      console.error("Error during logout:", error);
-    }
-  };
+  console.log('setUser in Sidebar.js:', typeof handleLogout);
+  console.log(user);
 
   const userName = user?.firstName || "User";
 
@@ -29,7 +16,7 @@ const Sidebar = ({ isSidebarMinimized, toggleSidebar, user, setUser }) => {
     { label: "Calendar", icon: Calendar, path: "/calendar" },
     { label: "Resources", icon: Book, path: "/resources" },
     { label: "Notebooks", icon: Edit, path: "/notebooks" },
-    { label: "Logout", icon: LogOut, action: handleLogout },
+    { label: "Logout", icon: LogOut, action: handleLogout }, // Use prop handleLogout
   ];
 
   return (
