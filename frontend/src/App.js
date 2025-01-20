@@ -73,7 +73,7 @@ function App() {
           handleLogout={handleLogout}
         />
       )}
-      <div className={`flex-1 ${isSidebarMinimized ? 'ml-[64px]' : 'ml-[256px]'}`}>
+      <div className={`flex-1 ${isSidebarMinimized ? 'ml-[64px]' : 'ml-[262px]'}`}>
         <Routes>
           <Route path="/login" element={<LoginPage setUser={setUser} fetchUser={fetchUser} />} />
           <Route path="/create-account" element={<CreateAccountPage />} />

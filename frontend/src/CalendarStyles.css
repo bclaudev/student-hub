@@ -97,7 +97,8 @@
     }
 
     .rbc-off-range-bg {
-      z-index: 0; /* Make sure off-range backgrounds stay behind */
+      z-index: 0;
+      background-color: #E9EBEF; /* Make sure off-range backgrounds stay behind */
   }
   
   .rbc-day-bg {

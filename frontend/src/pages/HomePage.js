@@ -37,8 +37,8 @@ const HomePage = () => {
   };
 
   return (
-    <div className="main-content">
-      <div className="flex items-center justify-between" style={{ height: "69px" }}>
+    <div className="main-content" style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+      <div className="flex items-center justify-between" style={{ height: "69px", flexShrink: 0 }}>
         <div className="flex items-center space-x-8">
           <h1 className="text-[20px] font-semibold pl-[32px]" style={{ fontFamily: "'Inter', sans-serif" }}>
             Calendar
@@ -83,7 +83,7 @@ const HomePage = () => {
         endAccessor="end"
         date={currentDate}
         onNavigate={(date) => setCurrentDate(moment(date).toDate())}
-        style={{ height: "calc(100vh - 100px)" }}
+        style={{ height: "100%" }}
         components={{
           toolbar: () => null,
           event: CustomCalendarEvent,
