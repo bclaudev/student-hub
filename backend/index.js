@@ -22,6 +22,7 @@ app.use(
     credentials: true, // Allow cookies
   })
 );
+
 app.use(express.json());
 
 // Initialize PostgreSQL pool and Drizzle
@@ -35,6 +36,7 @@ export const db = drizzle(pool); // Export Drizzle instance for usage in other p
 
 // Use auth routes
 app.use('/api/auth', authRoutes);
+app.use('/api', eventsRouter);
 
 // Start the server
 app.listen(port, () => {
