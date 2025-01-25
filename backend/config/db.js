@@ -1,15 +1,17 @@
-import { drizzle } from 'drizzle-orm/node-postgres';
-import pkg from 'pg';
-import { config } from 'dotenv';
+import { drizzle } from "drizzle-orm/node-postgres";
+import pkg from "pg";
+import dotenv from "dotenv";
 
-config(); 
+dotenv.config();
 
-const { Pool } = pkg;
+const { Pool } = pkg; // Destructure Pool from the default import
 
-//PostgreSQL connection pool
+if (!process.env.DATABASE_URL) {
+  throw new Error("DATABASE_URL is not set in environment variables.");
+}
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
-//Drizzle instance
 export const db = drizzle(pool);

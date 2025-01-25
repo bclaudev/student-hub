@@ -45,14 +45,14 @@ const Sidebar = ({ isSidebarMinimized, toggleSidebar, user, handleLogout }) => {
               className={`flex items-center ${
                 isSidebarMinimized ? "justify-center" : "px-4"
               } py-2 ${isActive ? "active" : "inactive"}`}
-              onClick={item.action ? item.action : undefined} // Ensure action is called
+              onClick={item.action ? item.action : undefined} 
             >
               <Link
-                to={item.action ? "#" : item.path} // Use "#" for Logout to avoid navigation
+                to={item.action ? "#" : item.path} 
                 className={`flex justify-center items-center ${
                   isSidebarMinimized ? "icon-link-minimized" : "ml-4"
                 }`}
-                onClick={item.action ? item.action : undefined} // Call action on click
+                onClick={item.action ? item.action : undefined} 
               >
                 <Icon
                   size={20}

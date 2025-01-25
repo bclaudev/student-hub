@@ -1,6 +1,7 @@
 import express from 'express';
-import { db } from './db.js'; // Import your database connection
-import { calendarEventsTable } from './calendar_events.js';
+import { db } from '../db/db.js';
+import { calendarEventsTable } from '../schema/calendar_events.js';
+
 
 const router = express.Router();
 

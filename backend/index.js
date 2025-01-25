@@ -5,10 +5,10 @@ import { config } from 'dotenv';
 import pkg from 'pg';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import cookieParser from 'cookie-parser';
+import eventsRouter from './routes/events.js';
+import { db } from './db/db.js';
 
-config(); // Load environment variables
-
-const { Pool } = pkg; // Destructure Pool from the imported 'pg' package
+config(); 
 
 const app = express();
 const port = 4000;
@@ -18,21 +18,12 @@ app.use(cookieParser());
 // Enable CORS and JSON parsing
 app.use(
   cors({
-    origin: 'http://localhost:3000', // Adjust this as needed for your frontend
-    credentials: true, // Allow cookies
+    origin: 'http://localhost:3000', 
+    credentials: true,
   })
 );
 
 app.use(express.json());
-
-// Initialize PostgreSQL pool and Drizzle
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL, // Ensure this exists in your .env file
-});
-if (!process.env.DATABASE_URL) {
-  throw new Error('DATABASE_URL is not set in environment variables.');
-}
-export const db = drizzle(pool); // Export Drizzle instance for usage in other parts of the app
 
 // Use auth routes
 app.use('/api/auth', authRoutes);

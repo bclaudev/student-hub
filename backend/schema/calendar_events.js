@@ -10,5 +10,5 @@ export const calendarEventsTable = pgTable("calendar_events", {
     eventType: varchar("event_type", { length: 20 }).notNull(),
     color: varchar("color", { length: 7 }),
     notifyMe: boolean("notify_me").default(false),
-    createdBy: integer("created_by").references(() => usersTable.id).onDelete("cascade")
+    createdBy: integer("created_by").references(() => usersTable.id, {onDelete: "cascade"})
 });
