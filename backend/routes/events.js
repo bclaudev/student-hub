@@ -1,13 +1,15 @@
 import express from 'express';
 import { db } from '../db/db.js';
 import { calendarEventsTable } from '../schema/calendar_events.js';
-
+import { verifyToken  } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 // POST /events: Add a new event
-router.post('/events', async (req, res) => {
+router.post('/events', verifyToken, async (req, res) => {
     try {
+        console.log('Request Body:', req.body); // Log the request body
+        console.log('User ID:', req.user?.id);  // Log the authenticated user's ID
         const {
             title,
             description,
@@ -29,21 +31,30 @@ router.post('/events', async (req, res) => {
             return res.status(400).json({ error: 'Missing required fields' });
         }
 
-        // Insert the event into the database
+        // Convert strings to Date objects
+        const startDate = new Date(startDateTime);
+        const endDate = new Date(endDateTime);
+
+        // Attempt to insert the event into the database
         const newEvent = await db.insert(calendarEventsTable).values({
             title,
             description,
-            startDateTime,
-            endDateTime,
+            startDateTime: startDate,
+            endDateTime: endDate,
             eventType,
             color,
             notifyMe,
             createdBy: userId
-        }).returning('*');
+        }).returning({
+            id: calendarEventsTable.id,
+            title: calendarEventsTable.title,
+            startDateTime: calendarEventsTable.startDateTime,
+            endDateTime: calendarEventsTable.endDateTime,
+          });
 
         res.status(201).json({ event: newEvent });
     } catch (error) {
-        console.error('Error adding event:', error);
+        console.error('Error adding event:', error); // Log detailed error to the console
         res.status(500).json({ error: 'Internal server error' });
     }
 });

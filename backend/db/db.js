@@ -14,4 +14,14 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL, // Use the connection string from environment variables
 });
 
+// Test database connection
+pool.query('SELECT 1', (err) => {
+  if (err) {
+    console.error('Database connection failed:', err);
+  } else {
+    console.log('Database connected successfully.');
+  }
+});
+
+
 export const db = drizzle(pool); // Initialize drizzle ORM with the pool
