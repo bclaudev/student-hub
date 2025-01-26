@@ -1,0 +1,120 @@
+.date-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .date-label {
+    width: 102px;
+    height: 35px;
+    flex-shrink: 0;
+    border-radius: 10px 0 0 10px;
+    border: 1px solid #d7d7d7;
+    text-align: center;
+    line-height: 35px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #4a4a4a;
+  }
+  
+  .end-date .date-label {
+    border-radius: 0 10px 10px 0;
+  }
+  
+  .date-input {
+    width: 102px;
+    height: 35px;
+    padding: 4px;
+    border: 1px solid #d7d7d7;
+    border-left: none;
+    border-radius: 0;
+    font-size: 14px;
+  }
+  
+  .start-date .date-input {
+    border-radius: 0 10px 10px 0;
+  }
+  
+  .end-date .date-input {
+    border-radius: 0 10px 10px 0;
+  }
+  
+  /*Event type styling*/
+  .event-type-container {
+    display: flex;
+    gap: 0; /* No spacing between buttons */
+  }
+  
+  .event-type-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  .event-type-button:first-child {
+    width: 78px;
+    height: 35px;
+    flex-shrink: 0;
+    border-radius: 10px 0px 0px 10px;
+    border: 1px solid #d7d7d7;
+  }
+  
+  .event-type-button:nth-child(2) {
+    width: 102px;
+    height: 35px;
+    flex-shrink: 0;
+    border: 1px solid #d7d7d7;
+    background: #ffffff;
+  }
+  
+  .event-type-button:nth-child(3) {
+    width: 96px;
+    height: 35px;
+    flex-shrink: 0;
+    border: 1px solid #d7d7d7;
+    background: #ffffff;
+  }
+  
+  .event-type-button:last-child {
+    width: 79px;
+    height: 35px;
+    flex-shrink: 0;
+    border-radius: 0px 10px 10px 0px;
+    border: 1px solid #d7d7d7;
+    background: #ffffff;
+  }
+  
+  /*Event color*/
+  .event-type-button.active {
+    border: 1px solid #2e2e2e;
+    background: #f2f2f2;
+  }
+  
+.color-selector-container {
+    display: flex;
+    gap: 10px; /* Space between circles */
+    margin-top: 16px; /* Add some space above the selector */
+  }
+  
+  .color-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0; 
+    transition: border 0.1s ease-in-out;
+  }
+  
+  .color-circle.active {
+    border: 1px solid #2e2e2e;
+  }
+  
+  .title-bar {
+    border-bottom: 1px solid #e5e5e5;
+    padding: 0 16px ;
+    height: 50px;
+  }
