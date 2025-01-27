@@ -21,15 +21,6 @@
     border-radius: 0 10px 10px 0;
   }
   
-  .date-input {
-    width: 102px;
-    height: 35px;
-    padding: 4px;
-    border: 1px solid #d7d7d7;
-    border-left: none;
-    border-radius: 0;
-    font-size: 14px;
-  }
   
   .start-date .date-input {
     border-radius: 0 10px 10px 0;
@@ -120,4 +111,19 @@
     border-bottom: 1px solid #e5e5e5;
     padding: 0 16px ;
     height: 50px;
+  }
+
+  .date-picker-inputs {
+    width: 102px;
+    height: 35px;
+    padding: 4px;
+    border: 1px solid #d7d7d7;
+    border-left: none;
+    border-radius: 0;
+    font-size: 14px;
+    display: flex;
+  }
+
+  .rdrDateDisplayWrapper {
+    display: none; /* Hides the date display section */
   }

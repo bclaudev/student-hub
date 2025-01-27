@@ -4,14 +4,20 @@ import { X, Check, Edit3, Edit, Calendar, Clock, Circle, Bell } from 'react-feat
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // Main style file
 import 'react-date-range/dist/theme/default.css'; // Theme css file
+import format from "date-fns/format";
 
 
 const AddEventModal = ({ onClose, onSave }) => {
   const [eventDetails, setEventDetails] = useState({
     title: "",
     description: "",
-    start: "",
-    end: "",
+    dateRange: {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: 'selection',
+    },
+    startTime: "09:00",
+    endTime: "10:00",
     eventType: "appointment", // Default event type
     color: "#FF5733", // Default color
     notifyMe: false,
@@ -27,20 +33,28 @@ const AddEventModal = ({ onClose, onSave }) => {
     }));
   };
 
-  const handleDateRangeChange = (ranges) => {
-    const { selection } = ranges;
+  const [showPicker, setShowPicker] = useState(false); // Controls calendar visibility
+  const [dateRange, setDateRange] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+    key: "selection",
+  });
+
+  const handleRangeChange = (ranges) => {
+    setDateRange(ranges.selection);
     setEventDetails((prevDetails) => ({
       ...prevDetails,
-      dateRange: selection,
+      dateRange: ranges.selection
     }));
+    setShowPicker(false); // Hide calendar after selecting the range
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const newEvent = {
       ...eventDetails,
-      start: new Date(eventDetails.start),
-      end: new Date(eventDetails.end),
+      start: new Date(eventDetails.dateRange.startDate),
+      end: new Date(eventDetails.dateRange.endDate),
     };
     onSave(newEvent);
   };
@@ -57,6 +71,23 @@ const AddEventModal = ({ onClose, onSave }) => {
       ...prevDetails,
       color: color,
     }));
+  };
+
+  const generateTimeOptions = () => {
+    const times = [];
+    for (let hour = 0; hour < 24; hour++) {
+      for (let minute = 0; minute < 60; minute += 15) {
+        const formattedTime = `${hour.toString().padStart(2, "0")}:${minute
+          .toString()
+          .padStart(2, "0")}`;
+        times.push(formattedTime);
+      }
+    }
+    return times.map((time) => (
+      <option key={time} value={time}>
+        {time}
+      </option>
+    ));
   };
 
   return (
@@ -121,17 +152,60 @@ const AddEventModal = ({ onClose, onSave }) => {
             />
           </div>
 
-          {/* Start and End Date */}
-          <div className="mb-4">
-                <DateRange
-                  ranges={[eventDetails.dateRange]}
-                  onChange={handleDateRangeChange}
-                  showSelectionPreview={true}
-                  moveRangeOnFirstSelection={false}
-                  editableDateInputs={true}
-                  rangeColors={["#FF5733"]}
-                />
-              </div>
+          {/* Start Date and End Date */}
+          <div>
+      <div className="date-picker-inputs">
+        <input
+          type="text"
+          value={dateRange.startDate ? format(dateRange.startDate, "yyyy-MM-dd") : ""}
+          readOnly
+          onClick={() => setShowPicker(true)} 
+          className="date-input w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-customPurple focus:border-customPurple focus:outline-none"
+        />
+      </div>
+
+      {/* Calendar Picker */}
+      {showPicker && (
+        <div className="popup-container fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" onClick={() => setShowPicker(false)}>
+          <div className="popup bg-white p-4 rounded-lg shadow-lg" onClick={(e) => e.stopPropagation()}>
+            <DateRange
+              ranges={[dateRange]}
+              onChange={handleRangeChange}
+              editableDateInputs={true}
+              moveRangeOnFirstSelection={false}
+              months={1}
+              direction="horizontal"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Time Dropdowns */}
+      <div className="time-dropdowns mt-4">
+        <label className="block mb-2">
+          Start Time:
+          <select
+            name="startTime"
+            value={eventDetails.startTime}
+            onChange={handleInputChange}
+            className="block w-full mt-1 p-2 border border-gray-300 rounded-md"
+          >
+            {generateTimeOptions()}
+          </select>
+        </label>
+        <label className="block mb-2">
+          End Time:
+          <select
+            name="endTime"
+            value={eventDetails.endTime}
+            onChange={handleInputChange}
+            className="block w-full mt-1 p-2 border border-gray-300 rounded-md"
+          >
+            {generateTimeOptions()}
+          </select>
+        </label>
+      </div>
+    </div>
 
           {/* Event Type Buttons */}
           <div className="event-type-container flex mb-4">

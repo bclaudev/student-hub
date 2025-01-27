@@ -29,7 +29,7 @@ const Sidebar = ({ isSidebarMinimized, toggleSidebar, user, handleLogout }) => {
       <div className={`profile-section ${isSidebarMinimized ? "minimized-profile" : ""}`}>
         <UserAvatar name={userName} size={42} />
         {!isSidebarMinimized && (
-          <div class="profile-details">
+          <div className="profile-details">
             <p className="text-lg font-semibold">Hello, {userName}</p>
             <button className="profile-settings">Change profile settings</button>
           </div>
