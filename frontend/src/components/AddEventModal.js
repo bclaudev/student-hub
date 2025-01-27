@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import "../AddEventModal.css";
 import { X, Check, Edit3, Edit, Calendar, Clock, Circle, Bell } from 'react-feather';
+import { DateRange } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; // Main style file
+import 'react-date-range/dist/theme/default.css'; // Theme css file
 
 
 const AddEventModal = ({ onClose, onSave }) => {
@@ -14,13 +17,21 @@ const AddEventModal = ({ onClose, onSave }) => {
     notifyMe: false,
   });
 
-  const predefinedColors = ["#E3EEF8", "#D1D0E4", "#F8E3EE", "#DEEEE4", "#F8F5E3"]; // Example colors
+  const predefinedColors = ["#E3EEF8", "#D1D0E4", "#F8E3EE", "#DEEEE4", "#F8F5E3"];
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setEventDetails((prevDetails) => ({
       ...prevDetails,
       [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleDateRangeChange = (ranges) => {
+    const { selection } = ranges;
+    setEventDetails((prevDetails) => ({
+      ...prevDetails,
+      dateRange: selection,
     }));
   };
 
@@ -111,28 +122,16 @@ const AddEventModal = ({ onClose, onSave }) => {
           </div>
 
           {/* Start and End Date */}
-          <div className="mb-4 flex items-center gap-4">
-            <input
-              type="datetime-local"
-              name="start"
-              placeholder="Start Date"
-              value={eventDetails.start}
-              onChange={handleInputChange}
-              className="date-input flex-1"
-              autoComplete="off"
-              required
-            />
-            <input
-              type="datetime-local"
-              name="end"
-              placeholder="End Date"
-              value={eventDetails.end}
-              onChange={handleInputChange}
-              className="date-input flex-1"
-              autoComplete="off"
-              required
-            />
-          </div>
+          <div className="mb-4">
+                <DateRange
+                  ranges={[eventDetails.dateRange]}
+                  onChange={handleDateRangeChange}
+                  showSelectionPreview={true}
+                  moveRangeOnFirstSelection={false}
+                  editableDateInputs={true}
+                  rangeColors={["#FF5733"]}
+                />
+              </div>
 
           {/* Event Type Buttons */}
           <div className="event-type-container flex mb-4">

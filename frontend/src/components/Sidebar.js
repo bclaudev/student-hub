@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import "../Sidebar.css";
 import UserAvatar from "./UserAvatar.js";
 
+
 const Sidebar = ({ isSidebarMinimized, toggleSidebar, user, handleLogout }) => {
   useEffect(() => {
     console.log('Sidebar updated user:', user);

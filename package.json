@@ -14,7 +14,9 @@
     "dev": "concurrently \"npm run dev --prefix backend\" \"npm start --prefix frontend\" \"npm run tailwind:watch --prefix frontend\""
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "concurrently": "^9.1.0",
+    "eslint": "^9.19.0",
     "nodemon": "^3.1.9"
   }
 }
