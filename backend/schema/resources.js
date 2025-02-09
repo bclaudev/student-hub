@@ -8,5 +8,5 @@ export const resourcesTable = pgTable("resources", {
   fileType: text("file_type").notNull(),
   fileSize: integer("file_size").notNull(),
   uploadedAt: timestamp("uploaded_at").defaultNow(),
-  uploadedBy: integer("uploaded_by").references(() => usersTable.id).onDelete("cascade"),
+  uploadedBy: integer("uploaded_by").references(() => usersTable.id, { onDelete: "cascade" }),
 });

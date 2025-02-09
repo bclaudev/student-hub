@@ -7,5 +7,5 @@ export const notesTable = pgTable("notes", {
     content: text("content").notNull(),
     createdAt: timestamp("created_at").defaultNow(),
     uploadedAt: timestamp("uploaded_at").defaultNow(),
-    createdBy: integer("created_by").references(() => usersTable.id).onDelete("cascade"),
+    createdBy: integer("created_by").references(() => usersTable.id, { onDelete: "cascade" }),
   });

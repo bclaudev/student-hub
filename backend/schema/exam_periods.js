@@ -4,8 +4,8 @@ import { classesTable } from "./classes.js";
 
 export const examPeriodsTable = pgTable("exam_periods", {
     id: serial("id").primaryKey(),
-    startDate: date("start_date").notNull(),
-    endDate: date("end_date").notNull(),
-    classId: integer("class_id").references(() => classesTable).onDelete("cascade"),
-    userId: integer("user_id").references(() => usersTable.id).onDelete("cascade")
+    startDate: timestamp("start_date").notNull(),
+    endDate: timestamp("end_date").notNull(), 
+    classId: integer("class_id").references(() => classesTable.id, { onDelete: "cascade" }),
+    userId: integer("user_id").references(() => usersTable.id, { onDelete: "cascade" }) 
   });
