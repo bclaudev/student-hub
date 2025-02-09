@@ -114,14 +114,14 @@
   }
 
   .date-picker-inputs {
-    width: 102px;
+    width: 250px;
     height: 35px;
     padding: 4px;
     border: 1px solid #d7d7d7;
-    border-left: none;
     border-radius: 0;
-    font-size: 14px;
+    font-size: 12px;
     display: flex;
+    padding: 8px 12px;
   }
 
   .rdrDateDisplayWrapper {

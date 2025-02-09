@@ -25,6 +25,12 @@ const AddEventModal = ({ onClose, onSave }) => {
 
   const predefinedColors = ["#E3EEF8", "#D1D0E4", "#F8E3EE", "#DEEEE4", "#F8F5E3"];
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const handleDropdownClick = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setEventDetails((prevDetails) => ({
@@ -154,138 +160,139 @@ const AddEventModal = ({ onClose, onSave }) => {
 
           {/* Start Date and End Date */}
           <div>
-      <div className="date-picker-inputs">
-        <input
-          type="text"
-          value={dateRange.startDate ? format(dateRange.startDate, "yyyy-MM-dd") : ""}
-          readOnly
-          onClick={() => setShowPicker(true)} 
-          className="date-input w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-customPurple focus:border-customPurple focus:outline-none"
-        />
-      </div>
-
-      {/* Calendar Picker */}
-      {showPicker && (
-        <div className="popup-container fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" onClick={() => setShowPicker(false)}>
-          <div className="popup bg-white p-4 rounded-lg shadow-lg" onClick={(e) => e.stopPropagation()}>
-            <DateRange
-              ranges={[dateRange]}
-              onChange={handleRangeChange}
-              editableDateInputs={true}
-              moveRangeOnFirstSelection={false}
-              months={1}
-              direction="horizontal"
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Time Dropdowns */}
-      <div className="time-dropdowns mt-4">
-        <label className="block mb-2">
-          Start Time:
-          <select
-            name="startTime"
-            value={eventDetails.startTime}
-            onChange={handleInputChange}
-            className="block w-full mt-1 p-2 border border-gray-300 rounded-md"
-          >
-            {generateTimeOptions()}
-          </select>
-        </label>
-        <label className="block mb-2">
-          End Time:
-          <select
-            name="endTime"
-            value={eventDetails.endTime}
-            onChange={handleInputChange}
-            className="block w-full mt-1 p-2 border border-gray-300 rounded-md"
-          >
-            {generateTimeOptions()}
-          </select>
-        </label>
-      </div>
-    </div>
-
-          {/* Event Type Buttons */}
-          <div className="event-type-container flex mb-4">
-            <div
-              className={`event-type-button ${
-                eventDetails.eventType === "event" ? "active" : ""
-              }`}
-              onClick={() => handleEventTypeChange("event")}
-            >
-              Event
-            </div>
-            <div
-              className={`event-type-button ${
-                eventDetails.eventType === "appointment" ? "active" : ""
-              }`}
-              onClick={() => handleEventTypeChange("appointment")}
-            >
-              Appointment
-            </div>
-            <div
-              className={`event-type-button ${
-                eventDetails.eventType === "deadline" ? "active" : ""
-              }`}
-              onClick={() => handleEventTypeChange("deadline")}
-            >
-              Deadline
-            </div>
-            <div
-              className={`event-type-button ${
-                eventDetails.eventType === "other" ? "active" : ""
-              }`}
-              onClick={() => handleEventTypeChange("other")}
-            >
-              Other
-            </div>
-          </div>
-
-          {/* Color Selector */}
-          <div className="color-selector-container flex mb-4">
-            {predefinedColors.map((color) => (
-              <div
-                key={color}
-                className={`color-circle ${
-                  eventDetails.color === color ? "active" : ""
-                }`}
-                style={{ backgroundColor: color }}
-                onClick={() => handleColorChange(color)}
-              ></div>
-            ))}
-          </div>
-
-          {/* Notify Me Checkbox */}
-          <div className="mb-4">
-            <label className="inline-flex items-center">
+            <div>
               <input
-                type="checkbox"
-                name="notifyMe"
-                checked={eventDetails.notifyMe}
-                onChange={handleInputChange}
-                className="rounded border-gray-300 text-customPurple focus:ring-customPurple"
+                type="text"
+                value={dateRange.startDate && dateRange.endDate
+                  ? `${format(dateRange.startDate, "dd.MM.yyyy")} - ${format(dateRange.endDate, "dd.MM.yyyy")}`
+                  : ""}
+                readOnly
+                onClick={() => setShowPicker(true)} 
+                className="date-picker-inputs border border-gray-300 rounded-md shadow-sm focus:ring-customPurple focus:ring-1 focus:border-customPurple focus:outline-none placeholder:text-placeholderGray placeholder:text-[12px]"
               />
-              <span className="ml-2 text-sm text-gray-700">Notify Me</span>
+            </div>
+
+          {/* Calendar Picker */}
+          {showPicker && (
+            <div className="popup-container fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" onClick={() => setShowPicker(false)}>
+              <div className="popup bg-white p-4 rounded-lg shadow-lg" onClick={(e) => e.stopPropagation()}>
+                <DateRange
+                  ranges={[dateRange]}
+                  onChange={handleRangeChange}
+                  editableDateInputs={true}
+                  moveRangeOnFirstSelection={false}
+                  months={1}
+                  direction="horizontal"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Time Dropdowns */}
+          <div className="time-dropdowns mt-4">
+            <label className="block mb-2">
+              Start Time:
+              <select
+                name="startTime"
+                value={eventDetails.startTime}
+                onChange={handleInputChange}
+                className="block w-full mt-1 p-2 border border-gray-300 rounded-md"
+              >
+                {generateTimeOptions()}
+              </select>
+            </label>
+            <label className="block mb-2">
+              End Time:
+              <select
+                name="endTime"
+                value={eventDetails.endTime}
+                onChange={handleInputChange}
+                className="block w-full mt-1 p-2 border border-gray-300 rounded-md"
+              >
+                {generateTimeOptions()}
+              </select>
             </label>
           </div>
+        </div>
 
-          {/* Submit Button */}
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="saveBtn w-12 h-12 bg-customPurple text-white rounded-full flex items-center justify-center hover:bg-[#8060DB]"
-            >
-              <Check size={24} />
-            </button>
+              {/* Event Type Buttons */}
+              <div className="event-type-container flex mb-4">
+                <div
+                  className={`event-type-button ${
+                    eventDetails.eventType === "event" ? "active" : ""
+                  }`}
+                  onClick={() => handleEventTypeChange("event")}
+                >
+                  Event
+                </div>
+                <div
+                  className={`event-type-button ${
+                    eventDetails.eventType === "appointment" ? "active" : ""
+                  }`}
+                  onClick={() => handleEventTypeChange("appointment")}
+                >
+                  Appointment
+                </div>
+                <div
+                  className={`event-type-button ${
+                    eventDetails.eventType === "deadline" ? "active" : ""
+                  }`}
+                  onClick={() => handleEventTypeChange("deadline")}
+                >
+                  Deadline
+                </div>
+                <div
+                  className={`event-type-button ${
+                    eventDetails.eventType === "other" ? "active" : ""
+                  }`}
+                  onClick={() => handleEventTypeChange("other")}
+                >
+                  Other
+                </div>
+              </div>
+
+              {/* Color Selector */}
+              <div className="color-selector-container flex mb-4">
+                {predefinedColors.map((color) => (
+                  <div
+                    key={color}
+                    className={`color-circle ${
+                      eventDetails.color === color ? "active" : ""
+                    }`}
+                    style={{ backgroundColor: color }}
+                    onClick={() => handleColorChange(color)}
+                  ></div>
+                ))}
+              </div>
+
+              {/* Notify Me Checkbox */}
+              <div className="mb-4">
+                <label className="inline-flex items-center">
+                  <input
+                    type="checkbox"
+                    name="notifyMe"
+                    checked={eventDetails.notifyMe}
+                    onChange={handleInputChange}
+                    className="rounded border-gray-300 text-customPurple focus:ring-customPurple"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">Notify Me</span>
+                </label>
+              </div>
+
+              {/* Submit Button */}
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className="saveBtn w-12 h-12 bg-customPurple text-white rounded-full flex items-center justify-center hover:bg-[#8060DB]"
+                >
+                  <Check size={24} />
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-
 );
 };
 
