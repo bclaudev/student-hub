@@ -1,1 +1,12 @@
+# Node modules
 node_modules/
+# Logs
+logs/
+*.log
+# Build files
+dist/
+# Environment variables
+.env
+# Database backups (if any)
+*.sqlite
+*.sqlite-journal

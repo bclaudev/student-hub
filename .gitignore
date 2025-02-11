@@ -4,3 +4,11 @@ backend/api_key.env
 node_modules/
 .cache/
 frontend/node_modules/.cache/default-development/22.pack
+# Logs
+logs/
+*.log
+# Build files
+dist/
+# Database backups (if any)
+*.sqlite
+*.sqlite-journal
