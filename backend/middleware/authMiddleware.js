@@ -1,21 +1,20 @@
-import jwt from 'jsonwebtoken';
+export const verifyToken = () => ({
+  beforeHandle: async ({ request, set }) => {
+    const authHeader = request.headers.get('authorization');
+    if (!authHeader) {
+      set.status = 401;
+      return { message: 'Unauthorized' };
+    }
 
-export const verifyToken = ({ request, set }) => {
-  const authHeader = request.headers.get('authorization');
-  const token = authHeader?.startsWith('Bearer ')
-    ? authHeader.split(' ')[1]
-    : null;
-
-  if (!token) {
-    set.status = 401;
-    return { message: 'Authentication token missing' };
+    try {
+      const token = authHeader.split(' ')[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      
+      request.user = decoded; // ✅ Attach user to request properly
+      return {}; // ✅ Always return an object
+    } catch (error) {
+      set.status = 401;
+      return { message: 'Invalid token' };
+    }
   }
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    return { user: decoded };
-  } catch (error) {
-    set.status = 401;
-    return { message: 'Invalid token' };
-  }
-};
+});

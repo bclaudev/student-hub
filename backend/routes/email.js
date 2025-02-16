@@ -1,9 +1,5 @@
-import express from 'express';
-import { sendEmailNotification } from '../controllers/emailController.js'; // Adjust path as needed
+import { Elysia } from 'elysia';
 
-const router = express.Router();
+const emailRoutes = new Elysia(); // Empty Elysia instance if unused
 
-// Define a route for sending emails
-router.post('/send-email', sendEmailNotification);
-
-export default router;
+export default emailRoutes; // ✅ Ensure this returns an instance of Elysia

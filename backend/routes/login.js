@@ -1,11 +1,6 @@
-// backend/routes/login.js
-import express from 'express';
-import { login } from '../controllers/loginController.js'; // Import the login logic
+import { Elysia } from 'elysia';
+import { login } from '../controllers/loginController.js';
 
-const router = express.Router();
+const loginRoutes = new Elysia().post('/login', login);
 
-// Login route
-
-router.post('/login', login);
-
-export default router;
+export default loginRoutes; // ✅ Ensure this returns an instance of Elysia

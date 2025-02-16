@@ -3,16 +3,14 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Set your SendGrid API key
-sgMail.setApiKey(process.env.SENDGRID_API_KEY); // Replace with your actual API key
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-// Function to send email notifications (e.g., account creation confirmation)
-export const sendEmailNotification = async (req, res) => {
-  const { email, subject, message } = req.body;
+export const sendEmailNotification = async ({ body, set }) => {
+  const { email, subject, message } = body;
 
   const msg = {
     to: email,
-    from: 'claudia_burcea@outlook.com', // Replace with your verified sender email
+    from: 'claudia_burcea@outlook.com',
     replyTo: 'claudia_burcea@outlook.com',
     subject: subject || 'Account created in StudentHub',
     text: message || 'Hello! Your account has been created!',
@@ -21,9 +19,10 @@ export const sendEmailNotification = async (req, res) => {
   try {
     await sgMail.send(msg);
     console.log(`Email sent to ${email}`);
-    res.json({ message: 'Email sent successfully' });
+    return { message: 'Email sent successfully' };
   } catch (error) {
     console.error('Error sending email:', error.response ? error.response.body : error);
-    res.status(500).json({ message: 'Failed to send email' });
+    set.status = 500;
+    return { message: 'Failed to send email' };
   }
 };
