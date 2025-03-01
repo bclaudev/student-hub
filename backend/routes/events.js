@@ -1,46 +1,52 @@
-import { Elysia } from 'elysia';
+import { Hono } from 'hono';
 import { db } from '../db/db.js';
 import { calendarEventsTable } from '../schema/calendar_events.js';
 import { verifyToken } from '../middleware/authMiddleware.js';
-import { eq, and } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
-const eventsRoutes = new Elysia()
-  .onRequest(verifyToken)
-  .post('/events', async ({ body, user, set }) => {
-    try {
-      const { title, description, startDateTime, endDateTime, eventType, color, notifyMe } = body;
-      const userId = user.id;
+const eventsRoutes = new Hono();
 
-      if (!title || !startDateTime || !endDateTime || !eventType) {
-        set.status = 400;
-        return { error: 'Missing required fields' };
-      }
+//Ensure user is authenticated for all event routes
+eventsRoutes.use('*', verifyToken);
 
-      const newEvent = await db.insert(calendarEventsTable).values({
-        title,
-        description,
-        startDateTime: new Date(startDateTime),
-        endDateTime: new Date(endDateTime),
-        eventType,
-        color,
-        notifyMe,
-        createdBy: userId
-      }).returning();
+//Create event
+eventsRoutes.post('/', async (c) => {
+  try {
+    const { title, description, startDateTime, endDateTime, eventType, color, notifyMe } = await c.req.json();
+    const userId = c.get('user').id;
 
-      return { event: newEvent };
-    } catch (error) {
-      set.status = 500;
-      return { error: 'Internal server error' };
+    if (!title || !startDateTime || !endDateTime || !eventType) {
+      return c.json({ error: 'Missing required fields' }, 400);
     }
-  })
-  .get('/events', async ({ user, set }) => {
-    try {
-      const events = await db.select().from(calendarEventsTable).where(eq(calendarEventsTable.createdBy, user.id)).execute();
-      return { events };
-    } catch (error) {
-      set.status = 500;
-      return { error: 'Internal server error' };
-    }
-  });
 
-export default eventsRoutes; // ✅ Ensure this returns an instance of Elysia
+    const newEvent = await db.insert(calendarEventsTable).values({
+      title,
+      description,
+      startDateTime: new Date(startDateTime),
+      endDateTime: new Date(endDateTime),
+      eventType,
+      color,
+      notifyMe,
+      createdBy: userId
+    }).returning();
+
+    return c.json({ event: newEvent });
+  } catch (error) {
+    console.error("Error creating event:", error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
+//Get user's events
+eventsRoutes.get('/', async (c) => {
+  try {
+    const userId = c.get('user').id;
+    const events = await db.select().from(calendarEventsTable).where(eq(calendarEventsTable.createdBy, userId)).execute();
+    return c.json({ events });
+  } catch (error) {
+    console.error("Error retrieving events:", error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
+export default eventsRoutes;

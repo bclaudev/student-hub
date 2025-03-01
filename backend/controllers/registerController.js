@@ -1,53 +1,46 @@
+import { db } from '../config/db.js';
+import { usersTable} from '../schema/users.js';
+import { eq } from 'drizzle-orm';
+
 export const registerUser = async ({ body, set }) => {
-  console.log("📌 Received request on /register:", body);
-
-  const { firstName, lastName, email, password, confirmPassword, dateOfBirth } = body;
-
-  // ✅ Validate Input
-  if (!firstName || !lastName || !email || !password || !confirmPassword || !dateOfBirth) {
-    set.status = 400;
-    console.log("❌ Missing required fields");
-    return { message: "All fields are required." };
-  }
-
-  if (password !== confirmPassword) {
-    set.status = 400;
-    console.log("❌ Passwords do not match");
-    return { message: "Passwords do not match." };
-  }
-
-  console.log("🔍 Checking if user exists...");
-  
   try {
-    console.log("⏳ Connecting to the database...");
-    
-    const existingUser = await db.select().from(usersTable).where(eq(usersTable.email, email)).execute();
-    
-    console.log("✅ Database query completed!");
+    const { email, password, firstName, lastName, dateOfBirth} = await c.req.json();
 
-    if (existingUser.length > 0) {
-      set.status = 409;
-      console.log("❌ Email already registered");
-      return { message: "Email already registered" };
+    //Checking if the user already exists
+    const existingUser = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.email, email));
+
+      if (existingUser.length) {
+        console.log("Email already in use: ", email)
+        return c.json({message: "Email already in use"}, 400);
+      }
+
+      //Insert new user in the database
+      const [newUser] = await db.insert(usersTable).values({
+        email,
+        password,
+        firstName,
+        lastName,
+        dateOfBirth: new Date(dateOfBirth)
+      }).returning();
+    
+      console.log("User registered successfully!")
+
+      return c.json({
+        message: "User registered successfully",
+        user: {
+          id: newUser.id,
+          firstName: newUser.firstName,
+          lastName: newUser.lastName,
+          email: newUser.email,
+          password: newUser.password,
+          dateOfBirth: newUser.dateOfBirth,
+        },
+      });
+    } catch (error) {
+        console.log("Error during registration: ", error);
+        return c.json({ message: "Internal server error" }, 500);
     }
-
-    console.log("🔑 Registering new user...");
-    
-    const newUser = await db.insert(usersTable).values({
-      firstName,
-      lastName,
-      email,
-      password, // 🔹 NOTE: This should be **hashed** before storing
-      dateOfBirth,
-    }).returning();
-
-    console.log("✅ User registered:", newUser);
-    set.status = 201;
-    return { message: "User registered successfully!", user: newUser };
-
-  } catch (error) {
-    console.error("❌ Database query failed:", error);
-    set.status = 500;
-    return { message: "Database error" };
-  }
-};
+}

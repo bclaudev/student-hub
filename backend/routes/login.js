@@ -1,6 +1,8 @@
-import { Elysia } from 'elysia';
+import { Hono } from 'hono';
 import { login } from '../controllers/loginController.js';
 
-const loginRoutes = new Elysia().post('/login', login);
+const loginRoutes = new Hono();
 
-export default loginRoutes; // ✅ Ensure this returns an instance of Elysia
+loginRoutes.post('/login', login);
+
+export default loginRoutes;

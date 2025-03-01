@@ -2,54 +2,43 @@ import { Hono } from 'hono';
 import { createServer } from 'http';
 import { URL } from 'url';
 
-console.log("🟢 Starting HonoJS server...");
+import authRoutes from './routes/auth.js';
+import eventsRoutes from './routes/events.js';
+import emailRoutes from './routes/email.js';
+import loginRoutes from './routes/login.js';
 
-// ✅ Create a new Hono app
+console.log("Hono is starting...");
+
 const app = new Hono();
 
-// ✅ Test route
-app.get('/test', (c) => {
-  console.log("✅ /test route hit!");
-  return c.json({ message: "Hono is working!" });
-});
+app.route('/api/auth', authRoutes);
+app.route('/api/events', eventsRoutes);
+app.route('/api/email', emailRoutes);
+app.route('/api', loginRoutes);
 
-// ✅ JSON body parsing
-app.post('/test-json', async (c) => {
-  console.log("🛠 /test-json route hit! Processing JSON...");
-  
-  try {
-    const body = await c.req.json();
-    console.log("📌 Parsed JSON:", body);
-    return c.json({ message: "JSON received", received: body });
-  } catch (error) {
-    console.error("❌ JSON Parsing Failed:", error);
-    return c.json({ message: "Invalid JSON body" }, 400);
-  }
-});
+console.log("Registered Routes:");
+console.log(app.routes);
 
-// ✅ Start Hono using Node.js `createServer()`
 const port = 4000;
 
 const server = createServer(async (req, res) => {
   console.log(`🟢 Incoming Request: ${req.method} ${req.url}`);
 
   try {
-    // ✅ Convert Node.js request into Fetch API-compatible request
+    
     const url = new URL(req.url, `http://${req.headers.host}`);
     
     const honoRequestInit = {
       method: req.method,
       headers: req.headers,
       body: req.method !== 'GET' && req.method !== 'HEAD' ? req : null,
-      duplex: 'half',  // ✅ Fix: Required for streaming body in Node.js 20+
+      duplex: 'half', 
     };
 
     const honoRequest = new Request(url, honoRequestInit);
 
-    // ✅ Process request using Hono
     const honoResponse = await app.fetch(honoRequest);
 
-    // ✅ If route is not found, return 404
     if (honoResponse.status === 404) {
       console.log("❌ Route not found in Hono.");
       res.writeHead(404, { "Content-Type": "application/json" });
@@ -57,7 +46,7 @@ const server = createServer(async (req, res) => {
       return;
     }
 
-    // ✅ Send Hono's response back to the client
+
     res.writeHead(honoResponse.status, Object.fromEntries(honoResponse.headers));
     const body = await honoResponse.text();
     console.log("📌 Sending response body:", body);
@@ -69,7 +58,7 @@ const server = createServer(async (req, res) => {
   }
 });
 
-// ✅ Fix: Start Server **AFTER** Registering Routes
+
 server.listen(port, () => {
   console.log(`🚀 Hono server running at http://localhost:${port}`);
 });

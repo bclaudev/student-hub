@@ -1,5 +1,5 @@
-import { Elysia } from 'elysia';
+import { Hono } from 'hono';
 
-const emailRoutes = new Elysia(); // Empty Elysia instance if unused
+const emailRoutes = new Hono(); // Empty Hono instance for now
 
-export default emailRoutes; // ✅ Ensure this returns an instance of Elysia
+export default emailRoutes;
