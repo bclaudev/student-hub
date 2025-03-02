@@ -12,6 +12,7 @@
     "react-icons": "^5.4.0"
   },
   "scripts": {
+    "tailwind:watch": "npx tailwindcss -i ./src/style.css -o ./dist/output.css --watch",
     "dev": "concurrently \"npm run dev --prefix backend\" \"npm start --prefix frontend\" \"npm run tailwind:watch --prefix frontend\""
   },
   "devDependencies": {

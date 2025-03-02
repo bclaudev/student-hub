@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header.js';
 import NotificationCard from '../components/NotificationCard.js';
-import handleRegistration from './CreateAccountPage/handleRegistration.js'; // Import the function
+import handleRegistration from './CreateAccountPage/handleRegistration.js';
 
 const CreateAccountPage = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -32,31 +33,62 @@ const CreateAccountPage = () => {
     });
   };
 
-  const validateStep = () => {
-    if (step === 1) {
-      if (!formData.firstName.trim() || !formData.lastName.trim()) {
+  const validateStep = (currentStep, isFinalSubmit = false) => {
+    setNotification(null);
+
+    if (currentStep === 1) {
+      if (!formData.firstName.trim()) {
         setNotification({
-          message: 'Please fill out both first and last names.',
+          message: 'Please fill out your first name.',
           borderColor: '#8D0C0C',
           bgColor: '#E3D8D8',
           textColor: '#6A0202',
         });
         return false;
       }
-    } else if (step === 2) {
-      if (!formData.email.trim() || !formData.dob) {
+      if (!formData.lastName.trim()) {
         setNotification({
-          message: 'Please provide a valid email and date of birth.',
+          message: 'Please fill out your last name.',
           borderColor: '#8D0C0C',
           bgColor: '#E3D8D8',
           textColor: '#6A0202',
         });
         return false;
       }
-    } else if (step === 3) {
-      if (!formData.password || formData.password !== formData.confirmPassword) {
+    } else if (currentStep === 2) {
+      if (!formData.email.trim()) {
         setNotification({
-          message: 'Passwords do not match or are invalid.',
+          message: 'Please provide a valid email.',
+          borderColor: '#8D0C0C',
+          bgColor: '#E3D8D8',
+          textColor: '#6A0202',
+        });
+        return false;
+      }
+      if (!formData.dateOfBirth) {
+        setNotification({
+          message: 'Please enter your date of birth.',
+          borderColor: '#8D0C0C',
+          bgColor: '#E3D8D8',
+          textColor: '#6A0202',
+        });
+        return false;
+      }
+    } else if (currentStep === 3) {
+      if (!isFinalSubmit) return true;
+
+      if (!formData.password) {
+        setNotification({
+          message: 'Please enter a password.',
+          borderColor: '#8D0C0C',
+          bgColor: '#E3D8D8',
+          textColor: '#6A0202',
+        });
+        return false;
+      }
+      if (formData.password !== formData.confirmPassword) {
+        setNotification({
+          message: 'Passwords do not match.',
           borderColor: '#8D0C0C',
           bgColor: '#E3D8D8',
           textColor: '#6A0202',
@@ -76,17 +108,23 @@ const CreateAccountPage = () => {
     return true;
   };
 
-  const handleNext = () => {
-    if (validateStep()) setStep((prevStep) => prevStep + 1);
+  const handleNext = (e) => {
+    e.preventDefault();
+    if (!validateStep(step)) return;
+    setNotification(null);
+    setStep(step + 1);
   };
 
   const handleBack = () => {
     setStep((prevStep) => prevStep - 1);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    handleRegistration(e, formData, setNotification); // Use the imported function
+
+    if (!validateStep(3, true)) return;
+
+    handleRegistration(e, formData, setNotification, navigate);
   };
 
   return (

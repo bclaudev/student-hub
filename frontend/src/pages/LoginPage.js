@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import NotificationCard from '../components/NotificationCard.js';
 import Header from '../components/Header.js';
-import { useNavigate } from 'react-router-dom'; // For navigation after login
+import { useNavigate } from 'react-router-dom';
 import { User, Key } from 'react-feather';
 
-function LoginPage({ setUser, fetchUser }) { // Receive setUser and fetchUser as props
+function LoginPage({ setUser, fetchUser }) { 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [notification, setNotification] = useState(null);
@@ -24,18 +24,35 @@ function LoginPage({ setUser, fetchUser }) { // Receive setUser and fetchUser as
     }
 
     try {
+      console.log("Sending login request...");
       const response = await fetch('http://localhost:4000/api/auth/login', {
         method: 'POST',
+        credentials: 'include', 
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
-        credentials: 'include', // Include cookies
       });
 
+      console.log("Response received:", response.status);
+
       if (response.ok) {
-        await fetchUser(); // Fetch user data immediately after login
-        navigate('/calendar'); // Redirect to /calendar
+        console.log("✅ Login successful! Fetching user data...");
+  
+        if (!fetchUser) {
+          console.error("❌ fetchUser() is not available as a prop.");
+          return;
+        }
+  
+        const userData = await fetchUser(); // ✅ Fetch user after login
+  
+        if (userData) {
+          console.log("✅ User data fetched:", userData);
+          navigate('/calendar'); // ✅ Redirect after user data is confirmed
+          console.log("🚀 Navigating to /calendar");
+        } else {
+          console.error("❌ fetchUser() returned null, not redirecting.");
+        }
       } else {
         const errorData = await response.json();
         setNotification({
@@ -44,9 +61,10 @@ function LoginPage({ setUser, fetchUser }) { // Receive setUser and fetchUser as
           bgColor: '#E3D8D8',
           textColor: '#6A0202',
         });
+        console.error("❌ Login failed:", errorData.message);
       }
     } catch (error) {
-      console.error('Error during login:', error);
+      console.error('❌ Error during login:', error);
       setNotification({
         message: 'An error occurred. Please try again later.',
         borderColor: '#8D0C0C',
@@ -72,7 +90,7 @@ function LoginPage({ setUser, fetchUser }) { // Receive setUser and fetchUser as
                 size={16}
               />
               <input
-                type="email"
+                type="text"
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}

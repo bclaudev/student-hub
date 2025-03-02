@@ -1,25 +1,29 @@
 import jwt from 'jsonwebtoken';
+import { getCookie } from 'hono/cookie'; // ✅ Use `getCookie`
 
 export const verifyToken = async (c, next) => {
   try {
-    const authHeader = c.req.header('Authorization');
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      console.log("Missing or invalid token");
+    console.log("🛠 Verifying token...");
+    
+    if (!c || !c.req) {  // ✅ Ensure `c.req` is defined before using `getCookie()`
+      console.log("❌ Context (c) is missing request data");
       return c.json({ message: "Unauthorized" }, 401);
     }
 
-    //Extract JWT
-    const token = authHeader.split(' ')[1];
+    const token = getCookie(c, 'token'); // ✅ Extract token from cookies
+
+    if (!token) {
+      console.log("❌ Missing or invalid token");
+      return c.json({ message: "Unauthorized" }, 401);
+    }
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("Token verified:", decoded);
+    console.log("✅ Token verified:", decoded);
 
-    //Set user data
-    c.set('user', decoded);
-
+    c.set('user', decoded); // ✅ Set user data in request context
     return next();
   } catch (error) {
-    console.error("Authentication failed:", error);
+    console.error("❌ Authentication failed:", error);
     return c.json({ message: "Unauthorized" }, 401);
   }
 };

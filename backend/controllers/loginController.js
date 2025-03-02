@@ -1,8 +1,8 @@
-import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { db } from '../config/db.js';
 import { usersTable } from '../schema/users.js';
 import { eq } from 'drizzle-orm';
+import { setCookie } from 'hono/cookie';
 
 export const login = async (c) => {
   try {
@@ -40,7 +40,13 @@ export const login = async (c) => {
     );
 
     //Set the token as a cookie
-    c.header("Set-Cookie", `token=${token}; HttpOnly; Path=/; Secure=false; SameSite=Strict`);
+    setCookie(c, 'token', token, {
+      httpOnly: true,
+      secure: false, // Change to `true` in production
+      sameSite: 'Lax',
+      path: '/',
+      maxAge: 12 * 60 * 60, // 12 hours
+    });
 
     console.log("Login successful!");
     return c.json({

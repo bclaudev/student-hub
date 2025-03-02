@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import { login } from '../controllers/loginController.js';
 import { registerUser } from '../controllers/registerController.js';
 import { verifyToken } from '../middleware/authMiddleware.js';
+import { getCookie, deleteCookie } from 'hono/cookie';
 
 console.log("Loading auth routes...");
 
@@ -41,6 +42,7 @@ authRoutes.get('/me', verifyToken, (c) => {
 //Logout
 authRoutes.post('/logout', (c) => {
   console.log("User logged out");
+  deleteCookie(c, 'token');
   return c.json({ message: "Logged out successfully" });
 });
 

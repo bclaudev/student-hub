@@ -1,6 +1,9 @@
 import { Hono } from 'hono';
 import { createServer } from 'http';
 import { URL } from 'url';
+import { cors } from 'hono/cors';
+import { getCookie, setCookie} from 'hono/cookie'
+
 
 import authRoutes from './routes/auth.js';
 import eventsRoutes from './routes/events.js';
@@ -11,6 +14,19 @@ console.log("Hono is starting...");
 
 const app = new Hono();
 
+app.use(cors({
+  origin: "http://localhost:3000",
+  allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], 
+  allowHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+}));
+
+app.use('*', async (c, next) => {
+  console.log("Applying global middleware...");
+  return next();
+});
+
+
 app.route('/api/auth', authRoutes);
 app.route('/api/events', eventsRoutes);
 app.route('/api/email', emailRoutes);
@@ -20,6 +36,7 @@ console.log("Registered Routes:");
 console.log(app.routes);
 
 const port = 4000;
+
 
 const server = createServer(async (req, res) => {
   console.log(`Incoming Request: ${req.method} ${req.url}`);

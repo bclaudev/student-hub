@@ -15,28 +15,37 @@ function App() {
 
   const fetchUser = async () => {
     try {
+      console.log("🔍 Fetching user from backend...");
       const response = await fetch('http://localhost:4000/api/auth/me', {
         method: 'GET',
-        credentials: 'include',
+        credentials: 'include', // ✅ Ensure cookies are sent
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data);
-      } else {
+      console.log("🔍 fetchUser() Response Status:", response.status);
+
+      if (!response.ok) {
         setUser(null);
+        return null;
       }
+
+      const userData = await response.json();
+      console.log("✅ User data received:", userData);
+      setUser(userData);
+      return userData;
     } catch (error) {
-      console.error('Error fetching user data:', error);
+      console.error("❌ Error fetching user:", error);
       setUser(null);
-    } finally {
-      setLoading(false);
+      return null;
     }
   };
 
   useEffect(() => {
-    fetchUser();
-  }, []);
+    if (location.pathname !== '/login' && location.pathname !== '/create-account') {
+      fetchUser(); }
+  }, [location.pathname]);
 
   const handleLogout = async () => {
     try {
@@ -56,7 +65,7 @@ function App() {
     }
   };
 
-  if (loading) {
+  if (user === undefined) {
     return <div>Loading...</div>;
   }
 
