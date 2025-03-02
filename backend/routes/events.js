@@ -37,6 +37,51 @@ eventsRoutes.post('/', async (c) => {
   }
 });
 
+//Modify existing event
+eventsRoutes.put('/:id', async (c) => {
+  try {
+    const user = c.get('user');
+    const eventId = parseInt(c.req.param('id'));
+    const { title, description, startDateTime, endDateTime, eventType, color, notifyMe } = await c.req.json();
+
+    if (!title || !startDateTime || !endDateTime || !eventType) {
+      return c.json({ error: 'Missing required fields'}, 400)
+    }
+
+    const [existingEvent] = await db
+      .select()
+      .from(calendarEventsTable)
+      .where(eq(calendarEventsTable.id, eventId))
+      .where(eq(calendarEventsTable.createdBy, user.id))
+      .execute();
+    
+    if (!existingEvent) {
+      return c.json({ error: 'Event not found'}, 404);
+    }
+
+    //Updating the event
+    const updatedEvent = await db
+      .update(calendarEventsTable)
+      .set({
+        title,
+        description,
+        startDateTime: new Date(startDateTime),
+        endDateTime: new Date(endDateTime),
+        eventType,
+        color,
+        notifyMe,
+      })
+      .where(eq(calendarEventsTable.id, eventId))
+      .returning();
+
+      console.log("Event updated successfully: ", updatedEvent);
+      return c.json({ message: "Event updated successfully", event: updatedEvent });
+  } catch (error) {
+    console.log("Error updating event: ", error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
 //Get user's events
 eventsRoutes.get('/', async (c) => {
   try {

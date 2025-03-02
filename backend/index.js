@@ -22,7 +22,7 @@ console.log(app.routes);
 const port = 4000;
 
 const server = createServer(async (req, res) => {
-  console.log(`🟢 Incoming Request: ${req.method} ${req.url}`);
+  console.log(`Incoming Request: ${req.method} ${req.url}`);
 
   try {
     
@@ -40,7 +40,7 @@ const server = createServer(async (req, res) => {
     const honoResponse = await app.fetch(honoRequest);
 
     if (honoResponse.status === 404) {
-      console.log("❌ Route not found in Hono.");
+      console.log("Route not found in Hono.");
       res.writeHead(404, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ message: "Not Found" }));
       return;
@@ -49,10 +49,10 @@ const server = createServer(async (req, res) => {
 
     res.writeHead(honoResponse.status, Object.fromEntries(honoResponse.headers));
     const body = await honoResponse.text();
-    console.log("📌 Sending response body:", body);
+    console.log("Sending response body:", body);
     res.end(body);
   } catch (error) {
-    console.error("❌ Fatal Error Processing Request:", error);
+    console.error("Fatal Error Processing Request:", error);
     res.writeHead(500, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ message: "Internal Server Error" }));
   }
@@ -60,5 +60,5 @@ const server = createServer(async (req, res) => {
 
 
 server.listen(port, () => {
-  console.log(`🚀 Hono server running at http://localhost:${port}`);
+  console.log(`Hono server running at http://localhost:${port}`);
 });
