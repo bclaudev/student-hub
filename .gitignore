@@ -12,3 +12,4 @@ dist/
 # Database backups (if any)
 *.sqlite
 *.sqlite-journal
+backend/node_modules
