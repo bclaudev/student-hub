@@ -1,20 +1,25 @@
-export const verifyToken = () => ({
-  beforeHandle: async ({ request, set }) => {
-    const authHeader = request.headers.get('authorization');
-    if (!authHeader) {
-      set.status = 401;
-      return { message: 'Unauthorized' };
+import jwt from 'jsonwebtoken';
+
+export const verifyToken = async (c, next) => {
+  try {
+    const authHeader = c.req.header('Authorization');
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      console.log("Missing or invalid token");
+      return c.json({ message: "Unauthorized" }, 401);
     }
 
-    try {
-      const token = authHeader.split(' ')[1];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      
-      request.user = decoded; // ✅ Attach user to request properly
-      return {}; // ✅ Always return an object
-    } catch (error) {
-      set.status = 401;
-      return { message: 'Invalid token' };
-    }
+    //Extract JWT
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("Token verified:", decoded);
+
+    //Set user data
+    c.set('user', decoded);
+
+    return next();
+  } catch (error) {
+    console.error("Authentication failed:", error);
+    return c.json({ message: "Unauthorized" }, 401);
   }
-});
+};

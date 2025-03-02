@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm";
 
 const eventsRoutes = new Hono();
 
-//Ensure user is authenticated for all event routes
+//User is logged in
 eventsRoutes.use('*', verifyToken);
 
 //Create event
