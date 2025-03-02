@@ -82,6 +82,38 @@ eventsRoutes.put('/:id', async (c) => {
   }
 });
 
+//Deleting events
+eventsRoutes.delete('/:id', async (c) => {
+  try {
+    const user = c.get('user');
+    const eventId = parseInt(c.req.param('id'));
+
+    //Event exists and belongs to the user
+    const [existingEvent] = await db
+      .select()
+      .from(calendarEventsTable)
+      .where(eq(calendarEventsTable.id, eventId))
+      .where(eq(calendarEventsTable.createdBy, user.id))
+      .execute();
+
+    if (!existingEvent) {
+      return c.json({ error: 'Event not found'}, 404);
+    }
+
+    //Delete the event
+    await db
+      .delete(calendarEventsTable)
+      .where(eq(calendarEventsTable.id, eventId))
+      .execute();
+
+      console.log("Event deleted successfully: ", eventId);
+      return c.json({ message: "Event deleted successfully" });
+  } catch (error) {
+      console.log("Error deleting event: ", error);
+      return c.json({ error: 'Internal server error' }, 500);
+  }
+}); 
+
 //Get user's events
 eventsRoutes.get('/', async (c) => {
   try {
