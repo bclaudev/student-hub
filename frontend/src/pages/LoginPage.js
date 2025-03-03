@@ -3,6 +3,7 @@ import NotificationCard from '../components/NotificationCard.js';
 import Header from '../components/Header.js';
 import { useNavigate } from 'react-router-dom';
 import { User, Key } from 'react-feather';
+import '../style.css';
 
 function LoginPage({ setUser, fetchUser }) { 
   const [email, setEmail] = useState('');
@@ -11,7 +12,7 @@ function LoginPage({ setUser, fetchUser }) {
   const navigate = useNavigate();
 
   const handleLogin = async (event) => {
-    event.preventDefault(); // Prevent page reload
+    event.preventDefault(); 
 
     if (!email || !password) {
       setNotification({
@@ -44,11 +45,11 @@ function LoginPage({ setUser, fetchUser }) {
           return;
         }
   
-        const userData = await fetchUser(); // ✅ Fetch user after login
+        const userData = await fetchUser();
   
         if (userData) {
           console.log("✅ User data fetched:", userData);
-          navigate('/calendar'); // ✅ Redirect after user data is confirmed
+          navigate('/calendar'); 
           console.log("🚀 Navigating to /calendar");
         } else {
           console.error("❌ fetchUser() returned null, not redirecting.");
@@ -77,50 +78,39 @@ function LoginPage({ setUser, fetchUser }) {
   return (
     <>
       <Header linkText="Create an account" linkUrl="/create-account" />
-      <div className="login-page flex items-center justify-center min-h-screen bg-white">
+      <div className="login-page">
         <div>
-          <h2 className="text-[20px] font-bold text-center mb-6">Login</h2>
+          <h2 className="login-title">Login</h2>
 
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleLogin} className="login-form">
             {/* Email Field */}
-            <div className="relative">
-              <User
-                color="#A585FF"
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                size={16}
-              />
+            <div className="input-container">
+              <User color="#A585FF" className="icon" size={16} />
               <input
                 type="text"
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="block w-[345px] pl-10 mt-1 px-3 py-2 border border-gray-300 rounded-[12px] shadow-sm focus:ring-customPurple focus:ring-1 focus:border-customPurple focus:outline-none placeholder:text-placeholderGray placeholder:text-[12px]"
+                className="input-field"
                 placeholder="Email"
               />
             </div>
 
             {/* Password Field */}
-            <div className="relative">
-              <Key
-                color="#A585FF"
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                size={16}
-              />
+            <div className="input-container">
+              <Key color="#A585FF" className="icon" size={16} />
               <input
                 type="password"
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="block w-[345px] pl-10 mt-1 px-3 py-2 border border-gray-300 rounded-[12px] shadow-sm focus:ring-customPurple focus:ring-1 focus:border-customPurple focus:outline-none placeholder:text-placeholderGray placeholder:text-[12px]"
+                className="input-field"
                 placeholder="Password"
               />
             </div>
 
-            <div className="flex justify-center mt-4">
-              <button
-                type="submit"
-                className="w-[155px] bg-customPurple text-white py-2 px-4 rounded-[25px] hover:bg-[#8060DB] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
+            <div className="login-button-container">
+              <button type="submit" className="loginBtn">
                 Login
               </button>
             </div>
