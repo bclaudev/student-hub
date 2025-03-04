@@ -15,7 +15,7 @@ function App() {
 
   const fetchUser = async () => {
     try {
-      console.log("🔍 Fetching user from backend...");
+      console.log("Fetching user from backend...");
       const response = await fetch('http://localhost:4000/api/auth/me', {
         method: 'GET',
         credentials: 'include', // ✅ Ensure cookies are sent
@@ -32,11 +32,11 @@ function App() {
       }
 
       const userData = await response.json();
-      console.log("✅ User data received:", userData);
+      console.log("User data received:", userData);
       setUser(userData);
       return userData;
     } catch (error) {
-      console.error("❌ Error fetching user:", error);
+      console.error("Error fetching user:", error);
       setUser(null);
       return null;
     }

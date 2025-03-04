@@ -2,17 +2,11 @@ import React, { useState } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import "../CalendarStyles.css";   // Keep your big-calendar overrides here
 import AddEventModal from "../components/AddEventModal.js";
 import CustomCalendarEvent from "../components/CustomCalendarEvent.js";
-import "../CalendarStyles.css";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-moment.updateLocale("en", {
-  week: {
-    dow: 1,
-  },
-});
-
+moment.updateLocale("en", { week: { dow: 1 } });
 const localizer = momentLocalizer(moment);
 
 const HomePage = () => {
@@ -23,52 +17,39 @@ const HomePage = () => {
   const handlePreviousMonth = () => {
     setCurrentDate((prev) => moment(prev).subtract(1, "month").toDate());
   };
-
   const handleNextMonth = () => {
     setCurrentDate((prev) => moment(prev).add(1, "month").toDate());
   };
-
   const handleToday = () => {
     setCurrentDate(new Date());
   };
-
   const handleAddEvent = (newEvent) => {
     setEvents((prevEvents) => [...prevEvents, newEvent]);
   };
 
   return (
-    <div className="main-content" style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-      <div className="flex items-center justify-between" style={{ height: "69px", flexShrink: 0 }}>
+    <div className="homepage-main-content">
+      {/* Top Bar */}
+      <div className="homepage-top-bar">
         <div className="flex items-center space-x-8">
-          <h1 className="text-[20px] font-semibold pl-[32px]" style={{ fontFamily: "'Inter', sans-serif" }}>
-            Calendar
-          </h1>
-          <button
-            onClick={handleToday}
-            className="text-[14px] font-normal rounded-[4px]"
-            style={{
-              fontFamily: "'Inter', sans-serif",
-              border: "1px solid #E9EBEF",
-              width: "61px",
-              height: "37px",
-            }}>
-              Today
+          <h1 className="homepage-title">Calendar</h1>
+          <button onClick={handleToday} className="today-button">
+            Today
           </button>
           <button onClick={handlePreviousMonth} className="px-2">
-            <FaChevronLeft size={16} />
+            &lt; {/* or FaChevronLeft icon */}
           </button>
-
           <button onClick={handleNextMonth} className="px-2">
-            <FaChevronRight size={16} />
+            &gt; {/* or FaChevronRight icon */}
           </button>
 
-          <span className="text-[20px] font-normal text-black" style={{ fontFamily: "'Inter', sans-serif" }}>
+          <span className="month-label">
             {moment(currentDate).format("MMMM YYYY")}
           </span>
         </div>
         <div className="flex justify-end pr-[32px]">
           <button
-            className="w-auto h-[40px] flex items-center justify-center gap-[10px] px-[32px] py-[10px] rounded-[25px] bg-[#A585FF] text-white hover:bg-[#8060DB]"
+            className="add-new-event-btn"
             onClick={() => setIsModalOpen(true)}
           >
             Add New Event
@@ -76,24 +57,26 @@ const HomePage = () => {
         </div>
       </div>
 
-      <Calendar
-        localizer={localizer}
-        events={events}
-        startAccessor="start"
-        endAccessor="end"
-        date={currentDate}
-        onNavigate={(date) => setCurrentDate(moment(date).toDate())}
-        style={{ height: "100%" }}
-        components={{
-          toolbar: () => null,
-          event: CustomCalendarEvent,
-        }}
-      />
+      {/* Calendar Container */}
+      <div className="calendar-container">
+        <Calendar
+          localizer={localizer}
+          events={events}
+          startAccessor="start"
+          endAccessor="end"
+          date={currentDate}
+          onNavigate={(date) => setCurrentDate(moment(date).toDate())}
+          components={{
+            toolbar: () => null,
+            event: CustomCalendarEvent,
+          }}
+        />
+      </div>
 
       {isModalOpen && (
-        <AddEventModal 
-          onClose={() => setIsModalOpen(false)} 
-          onSave={handleAddEvent} 
+        <AddEventModal
+          onClose={() => setIsModalOpen(false)}
+          onSave={handleAddEvent}
         />
       )}
     </div>

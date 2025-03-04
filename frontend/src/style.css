@@ -45,7 +45,7 @@
     }
 
     .header-logo {
-        @apply h-5; /* Adjust height if necessary */
+        @apply h-5;
     }
 
     .header-link {
@@ -65,4 +65,72 @@
       .notificationCard-success {
         @apply border border-[#474747] bg-[#F2F2F2] text-[#2E2E2E];
       }
+
+      /* Homepage/Calendar */
+      .homepage-main-content {
+        @apply flex flex-col h-screen;
+      }
+    
+      .homepage-top-bar {
+        @apply flex items-center justify-between h-[69px] shrink-0; 
+      }
+    
+      .homepage-title {
+        @apply text-[20px] font-semibold pl-[32px];
+        font-family: 'Inter', sans-serif;
+      }
+    
+      .today-button {
+        @apply text-[14px] font-normal rounded-[4px] border border-[#E9EBEF] w-[61px] h-[37px];
+        font-family: 'Inter', sans-serif;
+      }
+    
+      .month-label {
+        @apply text-[20px] font-normal text-black;
+        font-family: 'Inter', sans-serif;
+      }
+    
+      .add-new-event-btn {
+        @apply w-auto h-[40px] flex items-center justify-center gap-[10px]
+               px-[32px] py-[10px] rounded-[25px] bg-[#A585FF] text-white hover:bg-[#8060DB];
+      }
+    
+      .calendar-container {
+        @apply flex-1;
+      }
+
+    /* Event Modal */
+
+    .modal-overlay {
+        @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+    }
+    
+    .modal-container {
+        @apply bg-white rounded-lg w-[800px] shadow-lg relative;
+    }
+    
+    .add-event-title-bar {
+        @apply border-b border-[#E5E5E5] h-[50px] px-4 flex items-center justify-between;
+    }
+    
+    .add-event-content-container {
+        @apply flex;
+    }
+    
+    .add-event-left-column {
+        @apply flex flex-col items-center p-4 gap-6 border-r border-gray-300;
+    }
+    
+    .add-event-right-column {
+        @apply flex-1 p-4;
+    }
+    
+    .time-dropdowns {
+        @apply mt-4;
+    }
+    
+    .saveBtn {
+        @apply w-12 h-12 bg-customPurple text-white rounded-full flex items-center justify-center hover:bg-[#8060DB];
+    }
+
 }
