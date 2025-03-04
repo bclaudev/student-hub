@@ -67,19 +67,17 @@
     align-items: center;
     }
     
-    .rbc-today .rbc-date-cell span {
-        display: inline-block;
-        width: 32px; /* Circle size */
-        height: 32px; /* Circle size */
-        background-color: #A585FF; /* Purple circle */
-        color: #FFFFFF !important; /* White text */
-        border-radius: 50%; /* Makes it a circle */
-        text-align: center;
-        line-height: 32px; /* Vertically centers the text */
-        font-weight: bold; /* Make the number bold */
-        font-family: 'Inter', sans-serif;
-        z-index: 1; /* Ensure it appears above the rest of the content */
+    .rbc-now.rbc-current .rbc-button-link {
+      background-color: #a585ff;
+      color: #ffffff;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: inline-block;
+      text-align: center;
+      line-height: 32px;
     }
+    
 
     .rbc-calendar {
       position: relative; /* Creates a stacking context */
