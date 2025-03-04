@@ -40,37 +40,29 @@ const CreateAccountPage = () => {
       if (!formData.firstName.trim()) {
         setNotification({
           message: 'Please fill out your first name.',
-          borderColor: '#8D0C0C',
-          bgColor: '#E3D8D8',
-          textColor: '#6A0202',
+          variant: 'error',
         });
         return false;
       }
       if (!formData.lastName.trim()) {
         setNotification({
           message: 'Please fill out your last name.',
-          borderColor: '#8D0C0C',
-          bgColor: '#E3D8D8',
-          textColor: '#6A0202',
+          variant: 'error',
         });
         return false;
       }
     } else if (currentStep === 2) {
       if (!formData.email.trim()) {
         setNotification({
-          message: 'Please provide a valid email.',
-          borderColor: '#8D0C0C',
-          bgColor: '#E3D8D8',
-          textColor: '#6A0202',
+          message: 'Please provide a valid email address.',
+          variant: 'error',
         });
         return false;
       }
       if (!formData.dateOfBirth) {
         setNotification({
-          message: 'Please enter your date of birth.',
-          borderColor: '#8D0C0C',
-          bgColor: '#E3D8D8',
-          textColor: '#6A0202',
+          message: 'Please fill out your date of birth.',
+          variant: 'error',
         });
         return false;
       }
@@ -79,29 +71,26 @@ const CreateAccountPage = () => {
 
       if (!formData.password) {
         setNotification({
-          message: 'Please enter a password.',
-          borderColor: '#8D0C0C',
-          bgColor: '#E3D8D8',
-          textColor: '#6A0202',
+          message: 'Please fill out your desired password.',
+          variant: 'error',
         });
+        
         return false;
       }
       if (formData.password !== formData.confirmPassword) {
         setNotification({
-          message: 'Passwords do not match.',
-          borderColor: '#8D0C0C',
-          bgColor: '#E3D8D8',
-          textColor: '#6A0202',
+          message: 'Passwords do not match',
+          variant: 'error',
         });
+        
         return false;
       }
       if (!formData.agreeTerms) {
         setNotification({
-          message: 'You must agree to the terms and conditions.',
-          borderColor: '#8D0C0C',
-          bgColor: '#E3D8D8',
-          textColor: '#6A0202',
+          message: 'You must agree to our terms and conditions',
+          variant: 'error',
         });
+        
         return false;
       }
     }
@@ -259,9 +248,7 @@ const CreateAccountPage = () => {
         {notification && (
           <NotificationCard
             message={notification.message}
-            borderColor={notification.borderColor}
-            bgColor={notification.bgColor}
-            textColor={notification.textColor}
+            variant={notification.variant}
             onClose={() => setNotification(null)}
           />
         )}

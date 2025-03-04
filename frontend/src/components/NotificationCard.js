@@ -1,28 +1,17 @@
-// src/components/NotificationCard.js
 import React, { useEffect } from 'react';
 
-function NotificationCard({ message, borderColor, bgColor, textColor, onClose }) {
+function NotificationCard({ message, variant = 'error', onClose }) {
   useEffect(() => {
-    const timer = setTimeout(() => {
-      onClose();
-    }, 5000); // Hide after 5 seconds
-
-    return () => clearTimeout(timer); // Clear timer on component unmount
+    const timer = setTimeout(() => onClose(), 5000);
+    return () => clearTimeout(timer);
   }, [onClose]);
 
+  const variantClass = variant === 'error' 
+    ? 'notificationCard-error' 
+    : 'notificationCard-success';
+
   return (
-    <div
-      className="fixed bottom-4 left-1/2 transform -translate-x-1/2 text-left flex items-center justify-start px-4"
-      style={{
-        backgroundColor: bgColor,
-        border: `1px solid ${borderColor}`,
-        color: textColor,
-        width: '357px',
-        fontSize: '12px',
-        padding: '16px',
-        borderRadius: '12px',
-      }}
-    >
+    <div className={`notificationCard ${variantClass}`}>
       {message}
     </div>
   );

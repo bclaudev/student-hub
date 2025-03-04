@@ -17,10 +17,9 @@ function LoginPage({ setUser, fetchUser }) {
     if (!email || !password) {
       setNotification({
         message: 'Please provide both email and password.',
-        borderColor: '#8D0C0C',
-        bgColor: '#E3D8D8',
-        textColor: '#6A0202',
+        variant: 'error',
       });
+      
       return;
     }
 
@@ -38,40 +37,38 @@ function LoginPage({ setUser, fetchUser }) {
       console.log("Response received:", response.status);
 
       if (response.ok) {
-        console.log("✅ Login successful! Fetching user data...");
+        console.log("Login successful! Fetching user data...");
   
         if (!fetchUser) {
-          console.error("❌ fetchUser() is not available as a prop.");
+          console.error("fetchUser() is not available as a prop.");
           return;
         }
   
         const userData = await fetchUser();
   
         if (userData) {
-          console.log("✅ User data fetched:", userData);
+          console.log("User data fetched:", userData);
           navigate('/calendar'); 
-          console.log("🚀 Navigating to /calendar");
+          console.log("Navigating to /calendar");
         } else {
-          console.error("❌ fetchUser() returned null, not redirecting.");
+          console.error("fetchUser() returned null, not redirecting.");
         }
       } else {
         const errorData = await response.json();
         setNotification({
-          message: errorData.message || 'Login failed. Please try again.',
-          borderColor: '#8D0C0C',
-          bgColor: '#E3D8D8',
-          textColor: '#6A0202',
+          message: 'Login failed. Please check your credentials and try again.',
+          variant: 'error', 
         });
-        console.error("❌ Login failed:", errorData.message);
+        
+        console.error("Login failed:", errorData.message);
       }
     } catch (error) {
-      console.error('❌ Error during login:', error);
+      console.error('Error during login:', error);
       setNotification({
-        message: 'An error occurred. Please try again later.',
-        borderColor: '#8D0C0C',
-        bgColor: '#E3D8D8',
-        textColor: '#6A0202',
+        message: 'Error during login. Please try again later.',
+        variant: 'error',
       });
+      
     }
   };
 
@@ -120,12 +117,10 @@ function LoginPage({ setUser, fetchUser }) {
         {/* Notification Card */}
         {notification && (
           <NotificationCard
-            message={notification.message}
-            borderColor={notification.borderColor}
-            bgColor={notification.bgColor}
-            textColor={notification.textColor}
-            onClose={() => setNotification(null)}
-          />
+          message={notification.message}
+          variant={notification.variant}
+          onClose={() => setNotification(null)}
+        />
         )}
       </div>
     </>
