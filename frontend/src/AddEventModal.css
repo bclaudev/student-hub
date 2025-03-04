@@ -1,14 +1,6 @@
-.date-picker-inputs {
-  width: 250px;
-  height: 35px;
-  padding: 8px 12px;
-  border: 1px solid #d7d7d7;
-  border-radius: 0; 
-  font-size: 12px;
-  cursor: pointer;
-}
+/* AddEventModal.css */
 
-/* The popup overlay for the DateRange component */
+/* 1) The date picker popup overlay */
 .popup-container {
   position: fixed;
   inset: 0;
@@ -16,25 +8,35 @@
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 999; /* Above the main modal */
+  z-index: 999;
 }
 
-/* The small calendar container inside the popup */
 .popup {
   background: #fff;
   padding: 16px;
   border-radius: 8px;
 }
 
-/* Hide the date range's top display fields (if desired) */
+/* Hide react-date-range's top date fields if desired */
 .rdrDateDisplayWrapper {
   display: none;
 }
 
-/* Event Type Buttons */
+/* 2) The input that displays chosen start/end date */
+.date-picker-inputs {
+  width: 250px;
+  height: 35px;
+  border: 1px solid #d7d7d7;
+  border-radius: 0;
+  font-size: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+/* 3) Event type buttons */
 .event-type-container {
   display: flex;
-  gap: 0; /* No spacing between the 4 buttons */
+  gap: 0;
 }
 
 .event-type-button {
@@ -43,40 +45,42 @@
   justify-content: center;
   font-size: 13px;
   font-weight: 500;
-  color: #d7d7d7; 
+  color: #d7d7d7;
   cursor: pointer;
   user-select: none;
+  border: 1px solid #d7d7d7;
+  background: #fff;
 }
 
-/* Specific widths/borders for each button */
 .event-type-button:first-child {
   width: 78px;
   height: 35px;
-  border: 1px solid #d7d7d7;
   border-radius: 10px 0 0 10px;
 }
-.event-type-button:nth-child(2),
+.event-type-button:nth-child(2) {
+  width: 102px;
+  height: 35px;
+  border-radius: 0;
+}
 .event-type-button:nth-child(3) {
   width: 96px;
   height: 35px;
-  border: 1px solid #d7d7d7;
   border-radius: 0;
 }
 .event-type-button:last-child {
   width: 79px;
   height: 35px;
-  border: 1px solid #d7d7d7;
   border-radius: 0 10px 10px 0;
 }
 
-/* Active state highlight */
+/* Active event-type highlight */
 .event-type-button.active {
   border: 2px solid #9374E9;
   background: #f9f7fe;
   color: #9374E9;
 }
 
-/* Color Selector Circles */
+/* 4) Color selector circles */
 .color-selector-container {
   display: flex;
   gap: 10px;

@@ -103,34 +103,53 @@
 
     .modal-overlay {
         @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
-    }
-    
-    .modal-container {
+      }
+      .modal-container {
         @apply bg-white rounded-lg w-[800px] shadow-lg relative;
-    }
-    
-    .add-event-title-bar {
+      }
+      .add-event-title-bar {
         @apply border-b border-[#E5E5E5] h-[50px] px-4 flex items-center justify-between;
-    }
+      }
+      
+      .close-button {
+        @apply p-2 text-gray-700 hover:text-red-500;
+      }
     
-    .add-event-content-container {
-        @apply flex;
-    }
+      .feather-icon {
+        @apply text-[#D4D4D4];
+      }
     
-    .add-event-left-column {
-        @apply flex flex-col items-center p-4 gap-6 border-r border-gray-300;
-    }
+      .event-modal-form {
+        @apply grid grid-cols-[64px_1fr] gap-x-4 p-4;
+      }
     
-    .add-event-right-column {
-        @apply flex-1 p-4;
-    }
+      .centered-icon {
+        @apply flex justify-center items-start pt-2;
+      }
     
-    .time-dropdowns {
-        @apply mt-4;
-    }
+      .event-modal-form-field {
+        @apply mb-4;
+      }
     
-    .saveBtn {
-        @apply w-12 h-12 bg-customPurple text-white rounded-full flex items-center justify-center hover:bg-[#8060DB];
-    }
+      .event-modal-input {
+        @apply block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm
+               focus:ring-customPurple focus:ring-1 focus:border-customPurple 
+               focus:outline-none placeholder:text-placeholderGray placeholder:text-[12px];
+      }
+    
+      .event-modal-textarea {
+        @apply block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm
+               focus:ring-customPurple focus:ring-1 focus:border-customPurple 
+               focus:outline-none placeholder:text-placeholderGray placeholder:text-[12px];
+      }
+    
+      .event-modal-select {
+        @apply block w-full mt-1 p-2 border border-gray-300 rounded-md;
+      }
+    
+      .saveBtn {
+        @apply w-12 h-12 bg-customPurple text-white rounded-full flex items-center 
+               justify-center hover:bg-[#8060DB];
+      }
 
 }

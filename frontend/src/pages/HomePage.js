@@ -5,6 +5,8 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import "../CalendarStyles.css";   // Keep your big-calendar overrides here
 import AddEventModal from "../components/AddEventModal.js";
 import CustomCalendarEvent from "../components/CustomCalendarEvent.js";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+
 
 moment.updateLocale("en", { week: { dow: 1 } });
 const localizer = momentLocalizer(moment);
@@ -37,10 +39,10 @@ const HomePage = () => {
             Today
           </button>
           <button onClick={handlePreviousMonth} className="px-2">
-            &lt; {/* or FaChevronLeft icon */}
+            <FaChevronLeft size={16} />
           </button>
           <button onClick={handleNextMonth} className="px-2">
-            &gt; {/* or FaChevronRight icon */}
+            <FaChevronRight size={16} />
           </button>
 
           <span className="month-label">
