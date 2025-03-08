@@ -124,7 +124,7 @@
       }
     
       .centered-icon {
-        @apply flex justify-center items-start pt-2;
+        @apply flex justify-center items-start;
       }
     
       .event-modal-form-field {

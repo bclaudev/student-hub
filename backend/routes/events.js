@@ -6,19 +6,42 @@ import { eq } from "drizzle-orm";
 
 const eventsRoutes = new Hono();
 
-//User is logged in
+// Middleware to verify user token
 eventsRoutes.use('*', verifyToken);
 
-//Create event
+// Route to create a new event
 eventsRoutes.post('/', async (c) => {
   try {
-    const { title, description, startDateTime, endDateTime, eventType, color, notifyMe } = await c.req.json();
-    const userId = c.get('user').id;
+    const userId = c.get('user').id; // Get user ID from the request context
 
+    const body = await c.req.json(); // Parse request body
+
+    const {
+      title,
+      description,
+      startDateTime,
+      endDateTime,
+      eventType,
+      color,
+      notifyMe
+    } = body; // Destructure event details from the request body
+
+    // Validate required fields
     if (!title || !startDateTime || !endDateTime || !eventType) {
       return c.json({ error: 'Missing required fields' }, 400);
     }
 
+    // Prepare additional info by excluding certain fields
+    const additionalInfo = { ...body };
+    delete additionalInfo.title;
+    delete additionalInfo.description;
+    delete additionalInfo.startDateTime;
+    delete additionalInfo.endDateTime;
+    delete additionalInfo.eventType;
+    delete additionalInfo.color;
+    delete additionalInfo.notifyMe;
+
+    // Insert new event into the database
     const newEvent = await db.insert(calendarEventsTable).values({
       title,
       description,
@@ -27,27 +50,39 @@ eventsRoutes.post('/', async (c) => {
       eventType,
       color,
       notifyMe,
-      createdBy: userId
+      createdBy: userId,
+      additionalInfo
     }).returning();
 
-    return c.json({ event: newEvent });
+    return c.json({ event: newEvent }); // Return the created event
   } catch (error) {
-    console.error("Error creating event:", error);
     return c.json({ error: 'Internal server error' }, 500);
   }
 });
 
-//Modify existing event
+// Route to update an existing event
 eventsRoutes.put('/:id', async (c) => {
   try {
-    const user = c.get('user');
-    const eventId = parseInt(c.req.param('id'));
-    const { title, description, startDateTime, endDateTime, eventType, color, notifyMe } = await c.req.json();
+    const user = c.get('user'); // Get user from the request context
+    const eventId = parseInt(c.req.param('id')); // Get event ID from the request parameters
+    const body = await c.req.json(); // Parse request body
 
+    const {
+      title,
+      description,
+      startDateTime,
+      endDateTime,
+      eventType,
+      color,
+      notifyMe
+    } = body; // Destructure event details from the request body
+
+    // Validate required fields
     if (!title || !startDateTime || !endDateTime || !eventType) {
-      return c.json({ error: 'Missing required fields'}, 400)
+      return c.json({ error: 'Missing required fields'}, 400);
     }
 
+    // Check if the event exists and belongs to the user
     const [existingEvent] = await db
       .select()
       .from(calendarEventsTable)
@@ -59,8 +94,24 @@ eventsRoutes.put('/:id', async (c) => {
       return c.json({ error: 'Event not found'}, 404);
     }
 
-    //Updating the event
-    const updatedEvent = await db
+    // Prepare new additional info by excluding certain fields
+    const newAdditionalInfo = { ...body };
+    delete newAdditionalInfo.title;
+    delete newAdditionalInfo.description;
+    delete newAdditionalInfo.startDateTime;
+    delete newAdditionalInfo.endDateTime;
+    delete newAdditionalInfo.eventType;
+    delete newAdditionalInfo.color;
+    delete newAdditionalInfo.notifyMe;
+
+    // Merge existing additional info with new additional info
+    const mergedAdditionalInfo = {
+      ...existingEvent.additionalInfo,  
+      ...newAdditionalInfo             
+    };
+
+    // Update the event in the database
+    const [updatedEvent] = await db
       .update(calendarEventsTable)
       .set({
         title,
@@ -70,25 +121,24 @@ eventsRoutes.put('/:id', async (c) => {
         eventType,
         color,
         notifyMe,
+        additionalInfo: mergedAdditionalInfo
       })
       .where(eq(calendarEventsTable.id, eventId))
       .returning();
 
-      console.log("Event updated successfully: ", updatedEvent);
-      return c.json({ message: "Event updated successfully", event: updatedEvent });
+    return c.json({ message: "Event updated successfully", event: updatedEvent }); // Return the updated event
   } catch (error) {
-    console.log("Error updating event: ", error);
     return c.json({ error: 'Internal server error' }, 500);
   }
 });
 
-//Deleting events
+// Route to delete an event
 eventsRoutes.delete('/:id', async (c) => {
   try {
-    const user = c.get('user');
-    const eventId = parseInt(c.req.param('id'));
+    const user = c.get('user'); // Get user from the request context
+    const eventId = parseInt(c.req.param('id')); // Get event ID from the request parameters
 
-    //Event exists and belongs to the user
+    // Check if the event exists and belongs to the user
     const [existingEvent] = await db
       .select()
       .from(calendarEventsTable)
@@ -100,28 +150,29 @@ eventsRoutes.delete('/:id', async (c) => {
       return c.json({ error: 'Event not found'}, 404);
     }
 
-    //Delete the event
+    // Delete the event from the database
     await db
       .delete(calendarEventsTable)
       .where(eq(calendarEventsTable.id, eventId))
       .execute();
 
-      console.log("Event deleted successfully: ", eventId);
-      return c.json({ message: "Event deleted successfully" });
+    return c.json({ message: "Event deleted successfully" }); // Return success message
   } catch (error) {
-      console.log("Error deleting event: ", error);
-      return c.json({ error: 'Internal server error' }, 500);
+    return c.json({ error: 'Internal server error' }, 500);
   }
-}); 
+});
 
-//Get user's events
+// Route to get all events for the logged-in user
 eventsRoutes.get('/', async (c) => {
   try {
-    const userId = c.get('user').id;
-    const events = await db.select().from(calendarEventsTable).where(eq(calendarEventsTable.createdBy, userId)).execute();
-    return c.json({ events });
+    const userId = c.get('user').id; // Get user ID from the request context
+    const events = await db
+      .select()
+      .from(calendarEventsTable)
+      .where(eq(calendarEventsTable.createdBy, userId))
+      .execute(); // Retrieve events from the database
+    return c.json({ events }); // Return the events
   } catch (error) {
-    console.error("Error retrieving events:", error);
     return c.json({ error: 'Internal server error' }, 500);
   }
 });

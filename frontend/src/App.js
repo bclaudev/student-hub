@@ -7,24 +7,22 @@ import Sidebar from './components/Sidebar.js';
 import { useNavigate } from 'react-router-dom';
 
 function App() {
-  const location = useLocation();
-  const [isSidebarMinimized, setIsSidebarMinimized] = useState(false);
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const location = useLocation(); // Hook to get the current location
+  const [isSidebarMinimized, setIsSidebarMinimized] = useState(false); // State to track if the sidebar is minimized
+  const [user, setUser] = useState(null); // State to track the logged-in user
+  const [loading, setLoading] = useState(true); // State to track loading status
+  const navigate = useNavigate(); // Hook to navigate programmatically
 
+  // Function to fetch the current user from the backend
   const fetchUser = async () => {
     try {
-      console.log("Fetching user from backend...");
       const response = await fetch('http://localhost:4000/api/auth/me', {
         method: 'GET',
-        credentials: 'include', // ✅ Ensure cookies are sent
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-
-      console.log("🔍 fetchUser() Response Status:", response.status);
 
       if (!response.ok) {
         setUser(null);
@@ -32,7 +30,6 @@ function App() {
       }
 
       const userData = await response.json();
-      console.log("User data received:", userData);
       setUser(userData);
       return userData;
     } catch (error) {
@@ -42,11 +39,14 @@ function App() {
     }
   };
 
+  // Effect to fetch the user when the location changes, except for login and create-account pages
   useEffect(() => {
     if (location.pathname !== '/login' && location.pathname !== '/create-account') {
-      fetchUser(); }
+      fetchUser();
+    }
   }, [location.pathname]);
 
+  // Function to handle user logout
   const handleLogout = async () => {
     try {
       const response = await fetch("http://localhost:4000/api/auth/logout", {
@@ -65,10 +65,12 @@ function App() {
     }
   };
 
+  // Show loading message while fetching user data
   if (user === undefined) {
     return <div>Loading...</div>;
   }
 
+  // Determine if the sidebar should be shown
   const showSidebar = user && !['/login', '/create-account'].includes(location.pathname);
 
   return (
@@ -82,8 +84,8 @@ function App() {
           handleLogout={handleLogout}
         />
       )}
-        <div className={`flex-1 ${showSidebar ? (isSidebarMinimized ? 'ml-[64px]' : 'ml-[262px]') : ''}`}>
-          <Routes>
+      <div className={`flex-1 ${showSidebar ? (isSidebarMinimized ? 'ml-[64px]' : 'ml-[262px]') : ''}`}>
+        <Routes>
           <Route path="/login" element={<LoginPage setUser={setUser} fetchUser={fetchUser} />} />
           <Route path="/create-account" element={<CreateAccountPage />} />
           <Route

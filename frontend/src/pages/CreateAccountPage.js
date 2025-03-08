@@ -5,8 +5,8 @@ import NotificationCard from '../components/NotificationCard.js';
 import handleRegistration from './CreateAccountPage/handleRegistration.js';
 
 const CreateAccountPage = () => {
-  const navigate = useNavigate();
-  const [step, setStep] = useState(1);
+  const navigate = useNavigate(); // Hook to navigate programmatically
+  const [step, setStep] = useState(1); // State to track the current step in the form
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -15,9 +15,10 @@ const CreateAccountPage = () => {
     password: '',
     confirmPassword: '',
     agreeTerms: false,
-  });
-  const [notification, setNotification] = useState(null);
+  }); // State to track form data
+  const [notification, setNotification] = useState(null); // State to track notifications
 
+  // Effect to clear notifications after 5 seconds
   useEffect(() => {
     if (notification) {
       const timer = setTimeout(() => setNotification(null), 5000);
@@ -25,6 +26,7 @@ const CreateAccountPage = () => {
     }
   }, [notification]);
 
+  // Handler for input changes
   const handleInputChange = (e) => {
     const { id, value, type, checked } = e.target;
     setFormData({
@@ -33,6 +35,7 @@ const CreateAccountPage = () => {
     });
   };
 
+  // Function to validate the current step
   const validateStep = (currentStep, isFinalSubmit = false) => {
     setNotification(null);
 
@@ -74,7 +77,6 @@ const CreateAccountPage = () => {
           message: 'Please fill out your desired password.',
           variant: 'error',
         });
-        
         return false;
       }
       if (formData.password !== formData.confirmPassword) {
@@ -82,7 +84,6 @@ const CreateAccountPage = () => {
           message: 'Passwords do not match',
           variant: 'error',
         });
-        
         return false;
       }
       if (!formData.agreeTerms) {
@@ -90,13 +91,13 @@ const CreateAccountPage = () => {
           message: 'You must agree to our terms and conditions',
           variant: 'error',
         });
-        
         return false;
       }
     }
     return true;
   };
 
+  // Handler for the "Next" button
   const handleNext = (e) => {
     e.preventDefault();
     if (!validateStep(step)) return;
@@ -104,10 +105,12 @@ const CreateAccountPage = () => {
     setStep(step + 1);
   };
 
+  // Handler for the "Back" button
   const handleBack = () => {
     setStep((prevStep) => prevStep - 1);
   };
 
+  // Handler for the form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 

@@ -6,28 +6,25 @@ import { setCookie } from 'hono/cookie';
 
 export const login = async (c) => {
   try {
-    console.log("Incoming request to /login");
+    const { email, password } = await c.req.json(); // Parse email and password from the request body
 
-    const { email, password } = await c.req.json();
-
-    //Find user by email
+    // Find user by email
     const [user] = await db
       .select()
       .from(usersTable)
       .where(eq(usersTable.email, email));
 
+    // If user not found, return an error
     if (!user) {
-      console.log("Invalid email or password.");
       return c.json({ message: "Invalid email or password." }, 401);
     }
 
-    //Compare password
+    // Compare password
     if (password !== user.password) {
-      console.log("Password incorrect.");
       return c.json({ message: "Invalid email or password." }, 401);
     }
 
-    //Generate JWT token
+    // Generate JWT token
     const token = jwt.sign(
       {
         id: user.id,
@@ -36,10 +33,10 @@ export const login = async (c) => {
         email: user.email,
       },
       process.env.JWT_SECRET,
-      { expiresIn: '12h' }
+      { expiresIn: '12h' } // Token expires in 12 hours
     );
 
-    //Set the token as a cookie
+    // Set the token as a cookie
     setCookie(c, 'token', token, {
       httpOnly: true,
       secure: false, // Change to `true` in production
@@ -48,7 +45,7 @@ export const login = async (c) => {
       maxAge: 12 * 60 * 60, // 12 hours
     });
 
-    console.log("Login successful!");
+    // Return success message and user details
     return c.json({
       message: "Login successful!",
       user: {
@@ -59,6 +56,7 @@ export const login = async (c) => {
       }
     });
   } catch (error) {
+    // Handle any errors that occur during the login process
     console.error("Error during login:", error);
     return c.json({ message: "An error occurred. Please try again later." }, 500);
   }

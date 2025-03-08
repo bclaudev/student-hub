@@ -4,32 +4,31 @@ import { registerUser } from '../controllers/registerController.js';
 import { verifyToken } from '../middleware/authMiddleware.js';
 import { getCookie, deleteCookie } from 'hono/cookie';
 
-console.log("Loading auth routes...");
-
+// Create a new Hono instance for auth routes
 const authRoutes = new Hono();
 
-//Login route
+// Login route
 authRoutes.post('/login', async (c) => {
-  console.log("Incoming request to /login");
+  // Handle login request
   return await login(c);
 });
 
-//Register route
+// Register route
 authRoutes.post('/register', async (c) => {
-  console.log("Incoming request to /register");
-
+  // Parse request body
   const body = await c.req.json();
   if (!body) {
-    console.log("Request body is missing!");
+    // Return error if request body is missing
     return c.json({ message: "Request body is required." }, 400);
   }
 
+  // Handle user registration
   return await registerUser(c);
 });
 
-//Get current logged-in user
+// Get current logged-in user
 authRoutes.get('/me', verifyToken, (c) => {
-  console.log("/me endpoint hit for user:", c.get('user').email);
+  // Retrieve user data from the request context
   const user = c.get('user');
   return c.json({
     id: user.id,
@@ -39,9 +38,9 @@ authRoutes.get('/me', verifyToken, (c) => {
   });
 });
 
-//Logout
+// Logout route
 authRoutes.post('/logout', (c) => {
-  console.log("User logged out");
+  // Delete the token cookie to log out the user
   deleteCookie(c, 'token');
   return c.json({ message: "Logged out successfully" });
 });

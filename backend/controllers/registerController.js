@@ -4,55 +4,48 @@ import { eq } from 'drizzle-orm';
 
 export const registerUser = async (c) => {
   try {
-    const rawBody = await c.req.text();
-    console.log("🔍 Raw Request Body:", rawBody);
+    const rawBody = await c.req.text(); // Get the raw request body as text
 
+    // Check if the request body is empty
     if (!rawBody.trim()) {
-      console.log("❌ Request body is empty!");
       return c.json({ message: "Request body cannot be empty" }, 400);
     }
 
-    const parsedBody = JSON.parse(rawBody); // ✅ Manually parse JSON
-    console.log("🔍 Parsed Request Body:", parsedBody);
+    const parsedBody = JSON.parse(rawBody); // Manually parse JSON
 
-    const { email, password, firstName, lastName, dateOfBirth } = parsedBody;
+    const { email, password, firstName, lastName, dateOfBirth } = parsedBody; // Destructure the parsed body
 
+    // Check if all required fields are provided
     if (!email || !password || !firstName || !lastName || !dateOfBirth) {
-      console.log("❌ Missing required fields");
       return c.json({ message: "All fields (email, password, firstName, lastName, dateOfBirth) are required" }, 400);
     }
 
-    // ✅ Validate date format
+    // Validate date format
     const parsedDate = new Date(dateOfBirth);
     if (isNaN(parsedDate.getTime())) {
-      console.log("❌ Invalid date format:", dateOfBirth);
       return c.json({ message: "Please provide a valid date of birth in YYYY-MM-DD format." }, 400);
     }
 
-    console.log("✅ Valid Date Format:", parsedDate.toISOString());
-
-    // ✅ Check if user already exists
+    // Check if user already exists
     const existingUser = await db
       .select()
       .from(usersTable)
       .where(eq(usersTable.email, email));
 
     if (existingUser.length) {
-      console.log("❌ Email already in use: ", email);
       return c.json({ message: "Email already in use" }, 400);
     }
 
-    // ✅ Insert new user into the database
+    // Insert new user into the database
     const [newUser] = await db.insert(usersTable).values({
       email,
       password,
       firstName,
       lastName,
-      dateOfBirth: parsedDate, // ✅ Save properly formatted date
+      dateOfBirth: parsedDate, // Save properly formatted date
     }).returning();
 
-    console.log("✅ User registered successfully!");
-
+    // Return success message and user details
     return c.json({
       message: "User registered successfully",
       user: {
@@ -65,7 +58,8 @@ export const registerUser = async (c) => {
       },
     });
   } catch (error) {
-    console.error("❌ Error during registration:", error);
+    // Handle any errors that occur during the registration process
+    console.error("Error during registration:", error);
     return c.json({ message: "Internal server error" }, 500);
   }
 };

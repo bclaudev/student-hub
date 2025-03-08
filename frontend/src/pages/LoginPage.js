@@ -6,20 +6,21 @@ import { User, Key } from 'react-feather';
 import '../style.css';
 
 function LoginPage({ setUser, fetchUser }) { 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [notification, setNotification] = useState(null);
-  const navigate = useNavigate();
+  const [email, setEmail] = useState(''); // State to track the email input
+  const [password, setPassword] = useState(''); // State to track the password input
+  const [notification, setNotification] = useState(null); // State to track notifications
+  const navigate = useNavigate(); // Hook to navigate programmatically
 
+  // Handler for the login form submission
   const handleLogin = async (event) => {
-    event.preventDefault(); 
+    event.preventDefault(); // Prevent page reload
 
+    // Validate email and password fields
     if (!email || !password) {
       setNotification({
         message: 'Please provide both email and password.',
         variant: 'error',
       });
-      
       return;
     }
 
@@ -27,11 +28,11 @@ function LoginPage({ setUser, fetchUser }) {
       console.log("Sending login request...");
       const response = await fetch('http://localhost:4000/api/auth/login', {
         method: 'POST',
-        credentials: 'include', 
+        credentials: 'include', // Include cookies
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password }), // Send email and password in the request body
       });
 
       console.log("Response received:", response.status);
@@ -44,11 +45,11 @@ function LoginPage({ setUser, fetchUser }) {
           return;
         }
   
-        const userData = await fetchUser();
+        const userData = await fetchUser(); // Fetch user data after successful login
   
         if (userData) {
           console.log("User data fetched:", userData);
-          navigate('/calendar'); 
+          navigate('/calendar'); // Navigate to the calendar page
           console.log("Navigating to /calendar");
         } else {
           console.error("fetchUser() returned null, not redirecting.");
@@ -68,7 +69,6 @@ function LoginPage({ setUser, fetchUser }) {
         message: 'Error during login. Please try again later.',
         variant: 'error',
       });
-      
     }
   };
 
@@ -117,10 +117,10 @@ function LoginPage({ setUser, fetchUser }) {
         {/* Notification Card */}
         {notification && (
           <NotificationCard
-          message={notification.message}
-          variant={notification.variant}
-          onClose={() => setNotification(null)}
-        />
+            message={notification.message}
+            variant={notification.variant}
+            onClose={() => setNotification(null)}
+          />
         )}
       </div>
     </>

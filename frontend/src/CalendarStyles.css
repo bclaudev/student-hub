@@ -1,9 +1,8 @@
-/* frontend/src/CalendarStyles.css */
 .rbc-header {
-    font-family: "Inter", serif; /* Replace with your desired font */
-    font-size: 24px; /* Adjust size as needed */
+    font-family: "Inter", serif;
+    font-size: 24px; 
     font-weight: medium;
-    color: #333; /* Adjust text color */
+    color: #333; 
     text-transform: uppercase;
   }
 
@@ -18,7 +17,7 @@
     padding-top: 8px;
   }
 
-  /* Adjustments for dynamic sidebar */
+
 .full-screen-container {
     display: flex;
     height: 100vh;
@@ -35,8 +34,7 @@
   }
   
   .full-screen-calendar {
-    height: calc(100vh - 50px); /* Subtract height for header if any */
-    width: 100%;
+    height: calc(100vh - 50px); 
   }
 
   .rbc-day-bg + .rbc-day-bg {
@@ -58,11 +56,11 @@
       }
 
       .rbc-today {
-        background-color: transparent !important; /* Remove the default background color */
+        background-color: transparent !important; 
     }
     
     .rbc-today .rbc-date-cell {
-        display: flex; /* Ensures the circle can center properly */
+        display: flex;
     justify-content: center;
     align-items: center;
     }
@@ -80,25 +78,46 @@
     
 
     .rbc-calendar {
-      position: relative; /* Creates a stacking context */
-      z-index: 1; /* Lower stacking priority */
+      position: relative; 
+      z-index: 1; 
     }
     
     .rbc-day-bg {
-      position: relative; /* Keep background strokes in context */
+      position: relative; 
       z-index: 1;
     }
     
     .rbc-date-cell {
-      position: relative; /* Ensure text stays below modal */
+      position: relative; 
       z-index: 1;
     }
 
     .rbc-off-range-bg {
       z-index: 0;
-      background-color: #E9EBEF; /* Make sure off-range backgrounds stay behind */
+      background-color: #E9EBEF; 
   }
   
   .rbc-day-bg {
-      z-index: 0; /* Ensure day backgrounds stay below the modal */
+      z-index: 0;
   }
+
+  .rbc-event {
+    background-color: transparent !important
+  }
+
+  .rbc-selected {
+    background-color: transparent !important;
+}
+
+.rbc-overlay-header {
+  text-align: center;
+  border: none;
+}
+
+.rbc-overlay {
+  background-color: #fff;
+  border: 1px solid #f6f6f6;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+  position: absolute;
+  z-index: 2;
+} 
