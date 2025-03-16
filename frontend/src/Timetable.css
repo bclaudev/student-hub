@@ -33,7 +33,7 @@
   }
   
   .timetable-grid {
-    @apply grid min-w-[800px] border-[1px] border-gray-200 auto-rows-[100px];
+    @apply grid min-w-[800px] border-l border-r border-b border-gray-200 auto-rows-[100px];
   }
   
   
@@ -46,20 +46,20 @@
   }
   
   .timetable-day-header {
-    @apply p-4 font-medium text-gray-700 border-b border-gray-200 text-[50px] text-center;
+    @apply flex items-center justify-center p-2 font-medium text-gray-700 border-b border-gray-200 text-[50px];
   }
   
   .timetable-row {
-    @apply grid grid-cols-[100px_repeat(5,1fr)] border-b border-gray-200 relative;
+    @apply grid grid-cols-[100px_repeat(5,1fr)] border-gray-200;
   }
 
   
   .timetable-time-cell {
-    @apply p-4 text-sm text-gray-500 border-r border-t border-gray-200 ;
+    @apply p-1 text-[16px] text-[#667288] border-r border-gray-200 text-center;
   }
   
   .timetable-cell {
-    @apply p-2 border-r border-gray-200 min-h-[80px] relative;
+    @apply p-2 border-r border-b border-gray-200 min-h-[80px] relative;
   }
   
   .timetable-event {
