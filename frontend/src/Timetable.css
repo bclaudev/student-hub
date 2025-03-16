@@ -4,7 +4,7 @@
   }
   
   .timetable-header {
-    @apply flex flex-shrink-0 items-center justify-between;
+    @apply flex flex-shrink-0 items-center justify-between border-b;
   }
   
   .timetable-title-container {
@@ -50,7 +50,7 @@
   }
   
   .timetable-row {
-    @apply grid grid-cols-[100px_repeat(5,1fr)] border-gray-200;
+    @apply grid grid-cols-[80px_repeat(5,1fr)] border-gray-200;
   }
 
   
