@@ -1,0 +1,111 @@
+/* timetable.css */
+.timetable-container {
+    @apply h-screen flex flex-col;
+  }
+  
+  .timetable-header {
+    @apply flex flex-shrink-0 items-center justify-between;
+  }
+  
+  .timetable-title-container {
+    @apply flex items-center gap-2;
+  }
+  
+  .timetable-title {
+    @apply text-2xl font-bold text-gray-800 pl-[32px] text-[20px];
+  }
+  
+  .timetable-clock {
+    @apply w-6 h-6 text-indigo-600;
+  }
+  
+  .timetable-button {
+    @apply w-auto h-[40px] flex items-center justify-center gap-[10px]
+               px-[32px] py-[10px] rounded-[25px] bg-[#A585FF] text-white hover:bg-[#8060DB];
+  }
+  
+  .timetable-plus {
+    @apply w-4 h-4;
+  }
+  
+  .timetable-content {
+    @apply flex-grow overflow-y-auto;
+  }
+  
+  .timetable-grid {
+    @apply grid min-w-[800px] border-[1px] border-gray-200 auto-rows-[100px];
+  }
+  
+  
+  .timetable-grid-header {
+    @apply grid grid-cols-[100px_repeat(5,1fr)];
+  }
+  
+  .timetable-time-header {
+    @apply p-4 font-semibold text-gray-500 border-b border-gray-200;
+  }
+  
+  .timetable-day-header {
+    @apply p-4 font-medium text-gray-700 border-b border-gray-200 text-[50px] text-center;
+  }
+  
+  .timetable-row {
+    @apply grid grid-cols-[100px_repeat(5,1fr)] border-b border-gray-200 relative;
+  }
+
+  
+  .timetable-time-cell {
+    @apply p-4 text-sm text-gray-500 border-r border-t border-gray-200 ;
+  }
+  
+  .timetable-cell {
+    @apply p-2 border-r border-gray-200 min-h-[80px] relative;
+  }
+  
+  .timetable-event {
+    @apply flex flex-col justify-center p-2 border absolute left-0 right-0 m-1 align-middle pl-4;
+  }
+
+  .timetable-week-counter {
+    @apply flex items-center justify-center rounded-[10px] bg-[#A585FF] text-white text-[20px] w-[64px] h-[50px] font-semibold place-self-center;
+  }
+  
+  
+  /* The event colors are still applied via the inline classes (or you can create additional classes for them) */
+  
+  .modal-overlay {
+    @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center;
+  }
+  
+  .modal-content {
+    @apply bg-white rounded-lg p-6 w-full max-w-md;
+  }
+  
+  .modal-header {
+    @apply flex justify-between items-center mb-4;
+  }
+  
+  .modal-title {
+    @apply text-xl font-bold;
+  }
+  
+  .modal-close-button {
+    @apply text-gray-500 hover:text-gray-700;
+  }
+  
+  .modal-form {
+    @apply space-y-4;
+  }
+  
+  .modal-label {
+    @apply block text-sm font-medium text-gray-700;
+  }
+  
+  .modal-input {
+    @apply mt-1 block w-full rounded-md border border-gray-300 px-3 py-2;
+  }
+  
+  .modal-button {
+    @apply w-full bg-indigo-600 text-white rounded-lg px-4 py-2 hover:bg-indigo-700 transition-colors;
+  }
+  

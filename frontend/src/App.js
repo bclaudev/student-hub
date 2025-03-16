@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage.js';
 import CreateAccountPage from './pages/CreateAccountPage.js';
 import HomePage from './pages/HomePage.js';
 import Sidebar from './components/Sidebar.js';
+import TimetablePage from './pages/Timetable.js';
 import { useNavigate } from 'react-router-dom';
 
 function App() {
@@ -88,6 +89,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage setUser={setUser} fetchUser={fetchUser} />} />
           <Route path="/create-account" element={<CreateAccountPage />} />
+          <Route path="/timetable" element={<TimetablePage />} />
           <Route
             path="/calendar"
             element={
