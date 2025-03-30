@@ -3,18 +3,20 @@ import { createServer } from 'http';
 import { URL } from 'url';
 import { cors } from 'hono/cors';
 import { getCookie, setCookie} from 'hono/cookie'
+import { verifyToken } from './middleware/authMiddleware.js';
 
 
 import authRoutes from './routes/auth.js';
 import eventsRoutes from './routes/events.js';
 import emailRoutes from './routes/email.js';
 import loginRoutes from './routes/login.js';
+import {classesRoute} from './routes/classes.js';
 
 console.log("Hono is starting...");
 
 const app = new Hono();
 
-app.use(cors({
+app.use('*', cors({
   origin: "http://localhost:3000",
   allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], 
   allowHeaders: ["Content-Type", "Authorization"],
@@ -26,7 +28,8 @@ app.use('*', async (c, next) => {
   return next();
 });
 
-
+app.use('/api/classes', verifyToken);
+app.route('/api/classes', classesRoute);
 app.route('/api/auth', authRoutes);
 app.route('/api/events', eventsRoutes);
 app.route('/api/email', emailRoutes);

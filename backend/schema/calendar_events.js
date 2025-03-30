@@ -11,6 +11,7 @@ export const calendarEventsTable = pgTable("calendar_events", {
   eventType: varchar("event_type", { length: 20 }).notNull(), // Event type, required, max length 20 characters
   color: varchar("color", { length: 7 }), // Event color, optional, max length 7 characters (e.g., hex color code)
   notifyMe: boolean("notify_me").default(false), // Notification preference, default is false
+  recurrence: text("recurrence"), // Recurrence pattern, optional
 
   // Foreign key reference to the users table, with cascade delete
   createdBy: integer("created_by").references(() => usersTable.id, { onDelete: "cascade" }),
