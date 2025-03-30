@@ -5,6 +5,7 @@ import CreateAccountPage from './pages/CreateAccountPage.js';
 import HomePage from './pages/HomePage.js';
 import Sidebar from './components/Sidebar.js';
 import TimetablePage from './pages/Timetable.js';
+import Resources from './pages/Resources.js';
 import { useNavigate } from 'react-router-dom';
 
 function App() {
@@ -96,6 +97,7 @@ function App() {
               <HomePage user={user} setUser={setUser} handleLogout={handleLogout} />
             }
           />
+          <Route path="/resources" element={<Resources /> } />
         </Routes>
       </div>
     </div>

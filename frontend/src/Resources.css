@@ -1,0 +1,19 @@
+.resources-container {
+   @apply h-screen flex flex-col;
+}
+
+.resources-header {
+    @apply flex flex-shrink-0 items-center justify-between border-b;
+}
+
+.resources-title-container {
+    @apply flex items-center gap-2;
+}
+
+.resources-title {
+    @apply text-2xl font-bold text-gray-800 pl-[32px] text-[20px];
+}
+
+.resources-filters {
+    @apply flex items-baseline border-b;
+}

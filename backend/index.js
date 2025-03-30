@@ -4,13 +4,19 @@ import { URL } from 'url';
 import { cors } from 'hono/cors';
 import { getCookie, setCookie} from 'hono/cookie'
 import { verifyToken } from './middleware/authMiddleware.js';
+import { serveStatic } from '@hono/node-server/serve-static';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 import authRoutes from './routes/auth.js';
 import eventsRoutes from './routes/events.js';
 import emailRoutes from './routes/email.js';
 import loginRoutes from './routes/login.js';
 import {classesRoute} from './routes/classes.js';
+import uploadRoutes from './routes/upload.js';
 
 console.log("Hono is starting...");
 
@@ -30,16 +36,19 @@ app.use('*', async (c, next) => {
 
 app.use('/api/classes', verifyToken);
 app.route('/api/classes', classesRoute);
+app.route('/api/upload', uploadRoutes);
 app.route('/api/auth', authRoutes);
 app.route('/api/events', eventsRoutes);
 app.route('/api/email', emailRoutes);
 app.route('/api', loginRoutes);
 
+const uploadDir = path.resolve(__dirname, '../uploads');
+app.use('/uploads/*', serveStatic({ root: uploadDir }));
+
 console.log("Registered Routes:");
 console.log(app.routes);
 
 const port = 4000;
-
 
 const server = createServer(async (req, res) => {
   console.log(`Incoming Request: ${req.method} ${req.url}`);
@@ -77,7 +86,6 @@ const server = createServer(async (req, res) => {
     res.end(JSON.stringify({ message: "Internal Server Error" }));
   }
 });
-
 
 server.listen(port, () => {
   console.log(`Hono server running at http://localhost:${port}`);
