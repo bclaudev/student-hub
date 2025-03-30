@@ -17,6 +17,7 @@ import emailRoutes from './routes/email.js';
 import loginRoutes from './routes/login.js';
 import {classesRoute} from './routes/classes.js';
 import uploadRoutes from './routes/upload.js';
+import resourcesRoute from './routes/resources.js';
 
 console.log("Hono is starting...");
 
@@ -41,6 +42,7 @@ app.route('/api/auth', authRoutes);
 app.route('/api/events', eventsRoutes);
 app.route('/api/email', emailRoutes);
 app.route('/api', loginRoutes);
+app.route('/api/resources', resourcesRoute);
 
 const uploadDir = path.resolve(__dirname, '../uploads');
 app.use('/uploads/*', serveStatic({ root: uploadDir }));
